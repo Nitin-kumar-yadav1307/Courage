@@ -1,0 +1,13 @@
+1.What is the difference between TCP and UDP?
+ans-TCP vs UDP: TCP is a connection-oriented protocol that guarantees reliable, ordered delivery of data by tracking packets, retransmitting lost ones, and ensuring everything arrives in sequence. UDP, by contrast, is connectionless and fires packets off with no delivery guarantees or ordering — making it faster and lighter, which is why it's preferred for things like video streaming, DNS, and online gaming where speed matters more than perfection.Stateful connections: A stateful connection means both sides maintain shared context about the ongoing exchange — things like which bytes have been sent, acknowledged, and what comes next. TCP is stateful in this way; each side tracks the state of the session, which is precisely what enables it to detect and recover from dropped packets. A stateless protocol like raw UDP has no such memory — every message is treated in isolation.Why HTTP uses TCP: HTTP transfers structured data where correctness is non-negotiable — a single missing byte can break a page or corrupt a file. TCP's reliability and ordered delivery mean HTTP doesn't need to build its own error-recovery logic. That said, TCP's overhead (particularly its 3-way handshake) became a bottleneck for modern web traffic, which is why HTTP/3 now runs over QUIC — a UDP-based protocol that rebuilds reliability at the application layer to get the best of both worlds.
+
+2.What does it mean for a connection to be "stateful"?
+Ans-A stateful connection means both parties track the ongoing context of the communication — things like sequence numbers, acknowledgment counters, connection phase (opening/established/closing), and window sizes. Each side maintains a shared understanding of "where we are" in the conversation.
+TCP is stateful: when you send packets, each side knows which bytes have been acknowledged, which are in-flight, and what to expect next. This is how TCP can detect dropped packets and retransmit them.
+A stateless protocol (like raw UDP) treats every message in isolation — no memory of what came before.
+
+3.Why does HTTP use TCP and not UDP?
+Ans- HTTP is designed to transfer structured documents and data reliably. A few reasons TCP is the right fit:
+Correctness matters. If even one byte of an HTML page, image, or JSON response is lost or corrupted, the result is broken. TCP guarantees complete, ordered delivery; UDP doesn't.
+Request/response semantics. HTTP is inherently a conversation — a client sends a request and expects a specific response. TCP's stateful connection maps naturally to this model.
+No application-level retry logic needed. By delegating reliability to TCP, HTTP doesn't have to implement its own retransmission or ordering logic.
