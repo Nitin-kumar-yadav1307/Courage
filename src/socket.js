@@ -1,10 +1,11 @@
 const net = require("net");
 
-function openSocket(host,port){
+function openSocket(host,port,request){
     return new Promise((resolve,reject)=>{
 
         const socket = net.createConnection({host: host, port:port}, function(){
             console.log("connected successfully");
+              socket.write(request);
         });
       
         let rawData = '';

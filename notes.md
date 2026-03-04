@@ -11,3 +11,27 @@ Ans- HTTP is designed to transfer structured documents and data reliably. A few 
 Correctness matters. If even one byte of an HTML page, image, or JSON response is lost or corrupted, the result is broken. TCP guarantees complete, ordered delivery; UDP doesn't.
 Request/response semantics. HTTP is inherently a conversation — a client sends a request and expects a specific response. TCP's stateful connection maps naturally to this model.
 No application-level retry logic needed. By delegating reliability to TCP, HTTP doesn't have to implement its own retransmission or ordering logic.
+
+## GET vs POST
+
+**GET** — fetches data. Parameters go in the URL: `GET /search?q=cats`
+**POST** — sends data. Parameters go in the **body**: used for forms, logins, file uploads.
+
+Simple rule: GET *retrieves*, POST *submits*.
+
+---
+
+## What is `\r\n`?
+
+- `\r` = **carriage return** (moves cursor to start of line)
+- `\n` = **line feed** (moves cursor down one line)
+
+Together `\r\n` = one complete new line. It's a relic from typewriters/teletype machines. HTTP uses it because the original spec (built on older protocols) required it as the standard line ending — every header line ends with `\r\n`.
+
+---
+
+## What happens if you forget the blank line?
+
+The blank line (`\r\n\r\n`) signals **"headers are done, body starts here."**
+
+If you forget it, the server keeps waiting for more headers and **never starts reading the body** — the request just hangs or gets rejected. It's like ending a letter without a blank line between the address and the message — the reader doesn't know where one stops and the other begins.
