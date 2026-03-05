@@ -35,3 +35,38 @@ Together `\r\n` = one complete new line. It's a relic from typewriters/teletype 
 The blank line (`\r\n\r\n`) signals **"headers are done, body starts here."**
 
 If you forget it, the server keeps waiting for more headers and **never starts reading the body** — the request just hangs or gets rejected. It's like ending a letter without a blank line between the address and the message — the reader doesn't know where one stops and the other begins.
+
+# HTTP Headers Notes
+
+## Request vs Response Headers
+
+**Request headers** are sent *by the browser to the server* — they tell the server what the client wants and what it can handle.
+**Response headers** are sent *by the server back to the browser* — they describe the data being returned.
+
+Think of it like ordering food:
+- **Request header** = you telling the waiter *"I want a burger, no onions, and I'm allergic to nuts"*
+- **Response header** = the waiter bringing your food and saying *"Here's your burger, it's hot, and it weighs 300g"*
+
+---
+
+## `Content-Type`
+Tells the browser **what kind of data** is in the body, so it knows how to handle it.
+
+```
+Content-Type: text/html        → render as a webpage
+Content-Type: application/json → parse as JSON
+Content-Type: image/png        → display as an image
+```
+
+Without it, the browser would be guessing what to do with the data.
+
+---
+
+## `Content-Length`
+Tells the browser **how many bytes** the response body is.
+
+```
+Content-Length: 3495   → "the body is 3,495 bytes long"
+```
+
+This lets the browser know when the download is complete and show an accurate progress bar. Without it, the browser doesn't know if it has received *all* the data yet.
