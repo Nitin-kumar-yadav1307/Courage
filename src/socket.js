@@ -11,7 +11,7 @@ function openSocket(host,port,request){
         let rawData = '';
         socket.on("data", (chunks)=>{
              rawData += chunks.toString();
-            console.log(rawData);
+           
         });
 
         socket.on('end', ()=>{
