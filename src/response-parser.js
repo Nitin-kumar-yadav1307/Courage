@@ -4,6 +4,8 @@ function parseResponse(rawResponse){
   
   let head = responseArray[0];
   let body = responseArray[1];
+  // Strip chunk size numbers from chunked transfer encoding
+body = body.replace(/^[0-9a-f]+\r\n/gim, '').replace(/\r\n/g, '').trim();
 
   let headersArray= head.split("\r\n");
   let statusLine = headersArray[0];

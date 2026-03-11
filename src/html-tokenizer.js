@@ -14,15 +14,21 @@ function tokenize(html) {
         }
      }
      else if(char == '>'){
-        inTag = false;
+   inTag = false;
 
-        if(characters[0] == '/'){
-           tokens.push({ type: 'close', name: characters.slice(1) });
-        }
-        else{ tokens.push({ type: 'open', name: characters });}
-      
-        characters = "";
-     }
+   if(characters.toLowerCase().startsWith('!doctype')){
+     characters = '';
+     continue;
+   }
+
+   if(characters[0] == '/'){
+     tokens.push({ type: 'close', name: characters.slice(1) });
+   } else {
+     tokens.push({ type: 'open', name: characters.split(' ')[0] });
+   }
+
+   characters = "";
+}
      else{
         characters += char;
      }
