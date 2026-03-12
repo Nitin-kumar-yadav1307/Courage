@@ -1,5 +1,5 @@
 function buildDOM(tokens){
-
+const selfClosing = ['br', 'img', 'meta', 'input', 'link', 'hr'];
 let rootNode = {type: 'document',children: []};
  let stack = [rootNode];
 
@@ -8,7 +8,9 @@ let rootNode = {type: 'document',children: []};
        let newNode = { type : 'element', name: token.name,children: []}
        let currentParent = stack[stack.length - 1];
          currentParent.children.push(newNode);
-        stack.push(newNode);
+        if (!selfClosing.includes(newNode.name)) {
+    stack.push(newNode);
+  }
 }
 else if (token.type === 'text') {
     let textNode = { type: 'text', value: token.value };

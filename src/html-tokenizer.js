@@ -24,7 +24,17 @@ function tokenize(html) {
    if(characters[0] == '/'){
      tokens.push({ type: 'close', name: characters.slice(1) });
    } else {
-     tokens.push({ type: 'open', name: characters.split(' ')[0] });
+    let parts = characters.split(' ');
+    let tagName = parts[0];
+    let attributeParts = parts.slice(1);
+    let attributes = {};
+    for(let attr of attributeParts){
+      let key = attr.split('=')[0];
+      let value = attr.split('=')[1];
+     value = value.slice(1, value.length - 1); 
+      attributes[key] = value;
+    }
+     tokens.push({ type: 'open', name: tagName ,attributes });
    }
 
    characters = "";
