@@ -1,3 +1,14 @@
+/**
+ * The function `tokenize` parses an HTML string and returns an array of tokens representing the
+ * elements and text within the HTML.
+ * @param html - The function `tokenize` takes an HTML string as input and tokenizes it into an array
+ * of tokens. It identifies different types of tokens such as text, opening tags, closing tags, and
+ * attributes. The function parses the HTML string character by character and constructs tokens based
+ * on the encountered characters.
+ * @returns The function `tokenize` returns an array of tokens representing the HTML input. Each token
+ * is an object with a `type` property indicating whether it is a text, open tag, or close tag, and
+ * additional properties such as `value`, `name`, and `attributes` depending on the type of token.
+ */
 function tokenize(html) {
   let tokens = [];
 

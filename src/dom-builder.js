@@ -1,3 +1,11 @@
+/**
+ * The `buildDOM` function in JavaScript parses tokens to construct a DOM tree structure.
+ * @param tokens - The `tokens` parameter in the `buildDOM` function is an array of objects
+ * representing different types of tokens. Each token object has a `type` property indicating whether
+ * it is an 'open' tag, 'text' content, or 'close' tag, and a `name` property for
+ * @returns The `buildDOM` function is returning the rootNode object which represents the parsed DOM
+ * structure based on the input tokens provided to the function.
+ */
 function buildDOM(tokens){
 const selfClosing = ['br', 'img', 'meta', 'input', 'link', 'hr'];
 let rootNode = {type: 'document',children: []};
