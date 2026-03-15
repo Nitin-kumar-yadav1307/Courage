@@ -9,9 +9,15 @@ const url = process.argv[2];
 async function fetch(url){
   const {host,port,protocol,path} = parseURL(url);
 
-  const rawResponse = await  sendRequest(host,port,path);
+  const rawResponse = await  sendRequest(host,port,path,protocol);
 
   const {statusCode,statusText,headersObject,body}  =  parseResponse(rawResponse);
+
+  if (statusCode === 301 || statusCode === 302) {
+    const newUrl = headersObject['location'];
+    console.log('Redirecting to:', newUrl);
+    return fetch(newUrl);
+  }
 
   console.log('Status Code:', statusCode);
 console.log('Status Text:', statusText);
