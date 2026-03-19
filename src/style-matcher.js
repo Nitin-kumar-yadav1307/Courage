@@ -11,8 +11,8 @@ function styleMatcher(node, rules) {
       }
 
       // copy all declarations into node.styles
-      for (let key in rule.declarations) {
-        node.styles[key] = rule.declarations[key];
+      for (let key in rule.declaration) {
+        node.styles[key] = rule.declaration[key];
       }
     }
   }
