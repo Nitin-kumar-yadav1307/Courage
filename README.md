@@ -23,21 +23,21 @@ Because I want something I can call mine.
   - [x] Day 11 — Attributes + Self-closing + querySelector
   - [x] Day 12 — querySelectorAll + innerHTML
   - [x] Day 13 — Review & Clean
-- [ ] Week 3 — HTTPS & CSS Parser
-  - [ ] Day 14 — HTTPS Support
-  - [ ] Day 15 — CSS Tokenizer
-  - [ ] Day 16 — CSS Parser
-  - [ ] Day 17 — Style Matcher
-  - [ ] Day 18 — Computed Styles
-  - [ ] Day 19 — Connect Everything
-  - [ ] Day 20 — Review & Clean
+- [x] Week 3 — HTTPS & CSS Pipeline
+  - [x] Day 14 — HTTPS + TLS + Redirects + User-Agent
+  - [x] Day 15 — CSS Tokenizer
+  - [x] Day 16 — CSS Parser
+  - [x] Day 17 — Style Matcher
+  - [x] Day 18 — Computed Styles
+  - [x] Day 19 — Full Pipeline Connected
+  - [x] Day 20 — Review & Clean
 - [ ] Week 4 — Layout Engine
 - [ ] Week 5 — Renderer
 - [ ] Week 6 — JavaScript Support
 - [ ] Week 7 — UI, Tabs, History
 
 ## Run it
-node browser.js http://example.com
+node browser.js https://example.com
 
 ## Output
 Status Code: 200
@@ -47,13 +47,15 @@ Headers: { 'content-type': 'text/html', 'server': 'cloudflare', ... }
 --- BODY ---
 <!doctype html><html>...</html>
 
---- DOM TREE ---
+--- DOM TREE WITH STYLES ---
 {
   type: 'document',
   children: [
     { type: 'element', name: 'html', children: [
         { type: 'element', name: 'head', children: [...] },
-        { type: 'element', name: 'body', children: [...] }
+        { type: 'element', name: 'body',
+          styles: { background: '#eee', width: '60vw', margin: '15vh auto' },
+          children: [...] }
     ]}
   ]
 }
@@ -62,8 +64,8 @@ Headers: { 'content-type': 'text/html', 'server': 'cloudflare', ... }
 
 ### Networking Layer
 - src/url-parser.js       — breaks a URL into protocol, host, port, path
-- src/socket.js           — opens a raw TCP connection to any server
-- src/http-request.js     — builds and sends a raw HTTP GET request
+- src/socket.js           — raw TCP + TLS connections (HTTP + HTTPS)
+- src/http-request.js     — builds and sends HTTP GET request with User-Agent
 - src/response-parser.js  — parses raw response into statusCode, headers, body
 
 ### Parsing Layer
@@ -75,8 +77,14 @@ Headers: { 'content-type': 'text/html', 'server': 'cloudflare', ... }
 - src/querySelectorAll.js — find all matching nodes by tag name (DFS)
 - src/innerHTML.js        — get all text content inside any node
 
+### CSS Layer
+- src/css-tokenizer.js    — raw CSS → flat tokens ({ } : ; are landmarks)
+- src/css-parser.js       — tokens → structured rules { selector, declaration }
+- src/style-matcher.js    — walks DOM tree, attaches styles to matching nodes
+- src/computed-styles.js  — reads styles from any node, returns {} if none
+
 ### Entry Point
-- browser.js              — connects all modules, run from command line
+- browser.js              — full pipeline: fetch → DOM → CSS → styled nodes
 
 ## Modules
 
@@ -85,13 +93,13 @@ Takes any URL and returns protocol, host, port and path.
 Written using pure string manipulation. No regex. No libraries.
 
 ### TCP Socket
-Opens a raw TCP connection using Node's net module.
+Opens a raw TCP or TLS connection using Node's net and tls modules.
 Writes the HTTP request on connect. Collects all incoming
 data chunks and resolves the Promise when connection closes.
 
 ### HTTP Request
-Builds a raw HTTP GET request string and passes it through
-the socket. Returns the full server response as a string.
+Builds a raw HTTP GET request string with User-Agent header.
+Passes it through the socket. Returns the full server response.
 
 ### Response Parser
 Splits the raw HTTP response at \r\n\r\n — headers above,
@@ -125,37 +133,57 @@ Returns empty array if nothing found.
 ### innerHTML
 Walks a node's subtree and collects all text content.
 Returns everything as one concatenated string.
-Same concept as element.innerHTML in real browsers.
+
+### CSS Tokenizer
+Reads CSS character by character.
+Four landmarks: { } : ;
+Returns flat array of typed tokens.
+
+### CSS Parser
+Walks token array and groups into structured rules.
+Returns array of { selector, declaration } objects.
+
+### Style Matcher
+Walks entire DOM tree using DFS recursion.
+Matches CSS rules to DOM nodes by tag name.
+Attaches matching declarations to node.styles.
+
+### Computed Styles
+Reads node.styles attached by style matcher.
+Returns empty object if no styles matched.
+Never returns undefined — always safe to use.
 
 ## Journal
 Day 1  — Learned how the internet works at the wire level.
           TCP handshakes, DNS, HTTP — nothing is magic anymore.
 Day 2  — Built the URL parser. 5/5 tests passing.
-          Learned how a URL is structured at the spec level.
 Day 3  — Built the TCP socket. Connected to example.com:80.
           That moment when 'connected successfully' printed — unforgettable.
 Day 4  — Built the HTTP request. Courage fetched the world's
           first website — info.cern.ch. Still running after 30 years.
 Day 5  — Built the response parser. 4/4 tests passing.
-          Raw string → clean { statusCode, headers, body }.
 Day 6  — Connected everything. One command. Real structured data.
-          node browser.js http://example.com — and it works.
 Day 7  — Week 1 complete. Reviewed, commented, cleaned.
-Day 8  — Built the HTML tokenizer. HTML is just characters with meaning.
-          < starts a tag. > ends it. Everything else is text.
+Day 8  — Built the HTML tokenizer. < starts a tag. > ends it.
 Day 9  — Built the DOM tree using a stack. DSA in real life.
-          Last in first out — exactly how HTML nesting works.
 Day 10 — Connected networking to parsing. One full pipeline.
-          Fetch a webpage. Get a DOM tree. One command.
-Day 11 — Added attribute parsing, self-closing tag support, querySelector.
-          <a href="..."> now captures href. <br> no longer breaks the tree.
-Day 12 — Built querySelectorAll and innerHTML.
-          Find every matching node. Read any text content. DOM API complete.
-Day 13 — Week 2 complete. Reviewed, commented, cleaned.
-          Nine modules. Two weeks. Every line written by hand.
+Day 11 — Attributes, self-closing tags, querySelector.
+Day 12 — querySelectorAll and innerHTML. DOM API complete.
+Day 13 — Week 2 complete. Nine modules. Every line by hand.
+Day 14 — HTTPS working. Fetched github.com, wikipedia.org, Jal Mitra.
+          Wikipedia said no without User-Agent. Added Courage/1.0. It said yes.
+Day 15 — CSS tokenizer. { } : ; are the landmarks.
+Day 16 — CSS parser. Flat tokens → structured rules.
+Day 17 — Style matcher. DFS again. Every node gets its styles.
+Day 18 — getComputedStyle. Simplest module. One job. Done well.
+Day 19 — Full pipeline connected. body.styles = { background: '#eee' }
+Day 20 — Week 3 complete. 13 modules. Reviewed, commented, cleaned.
+          Ready for Week 4 — Layout Engine.
 
 ## What's Next
-Week 3: HTTPS support so Courage can reach any website.
-Then a CSS parser — read stylesheets, match rules to DOM nodes.
-Every element will know its computed styles.
-The browser gets a sense of how things should look.
+Week 4: Layout Engine.
+Every DOM node gets exact pixel coordinates.
+{ x, y, width, height } — calculated from styles and content.
+The CSS box model implemented from scratch.
+This is where most browser projects quit.
+Courage keeps going.
