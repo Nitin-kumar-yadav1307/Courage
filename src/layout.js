@@ -51,4 +51,23 @@ if (node.styles && node.styles.width) {
   // rest of the logic comes here
 }
 
+ function parseMargin(marginValue, elementWidth, parentWidth){
+
+  let parts = marginValue.split(' ');
+
+  let top, bottom, left, right;
+
+  if(parts.length == 2){
+
+  }
+
+  if(parts.length == 1){
+    
+  }
+
+
+  return { top, bottom, left, right }
+
+}
+
 module.exports = { calculateLayout };
