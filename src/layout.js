@@ -51,23 +51,35 @@ if (node.styles && node.styles.width) {
   // rest of the logic comes here
 }
 
- function parseMargin(marginValue, elementWidth, parentWidth){
-
+ function parseMargin(marginValue, viewportWidth, viewportHeight) {
   let parts = marginValue.split(' ');
 
-  let top, bottom, left, right;
+  let top, right, bottom, left;
 
-  if(parts.length == 2){
-
+  if (parts.length === 1) {
+    top = right = bottom = left =
+      parseValue(parts[0], viewportWidth, viewportHeight);
   }
 
-  if(parts.length == 1){
-    
+  else if (parts.length === 2) {
+    top = bottom = parseValue(parts[0], viewportWidth, viewportHeight);
+    right = left = parseValue(parts[1], viewportWidth, viewportHeight);
   }
 
+  else if (parts.length === 3) {
+    top = parseValue(parts[0], viewportWidth, viewportHeight);
+    right = left = parseValue(parts[1], viewportWidth, viewportHeight);
+    bottom = parseValue(parts[2], viewportWidth, viewportHeight);
+  }
 
-  return { top, bottom, left, right }
+  else if (parts.length === 4) {
+    top = parseValue(parts[0], viewportWidth, viewportHeight);
+    right = parseValue(parts[1], viewportWidth, viewportHeight);
+    bottom = parseValue(parts[2], viewportWidth, viewportHeight);
+    left = parseValue(parts[3], viewportWidth, viewportHeight);
+  }
 
+  return { top, right, bottom, left };
 }
 
 module.exports = { calculateLayout };
