@@ -33,7 +33,22 @@ function calculateLayout(node, parentWidth, currentY) {
 if (node.styles && node.styles.width) {
   node.layout.width = parseValue(node.styles.width, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 }
-  let childY = currentY;
+
+let childY = currentY;
+
+if (node.styles && node.styles.margin) {
+  const margin = parseMargin(
+    node.styles.margin,
+    VIEWPORT_WIDTH,
+    VIEWPORT_HEIGHT,
+    node.layout.width,
+    parentWidth
+  );
+  node.layout.x = margin.left;
+  node.layout.y = currentY + margin.top;
+  childY = node.layout.y;
+}
+  
 
  for (let Node of node.children) {
   if (Node.type === 'text') {
@@ -45,13 +60,13 @@ if (node.styles && node.styles.width) {
     }
   }
 }
-  node.layout.height = childY - currentY;
+  node.layout.height = childY - node.layout.y;
 
 
   // rest of the logic comes here
 }
 
- function parseMargin(marginValue, viewportWidth, viewportHeight) {
+ function parseMargin(marginValue, viewportWidth, viewportHeight, elementWidth, parentWidth) {
   let parts = marginValue.split(' ');
 
   let top, right, bottom, left;
@@ -62,9 +77,14 @@ if (node.styles && node.styles.width) {
   }
 
   else if (parts.length === 2) {
-    top = bottom = parseValue(parts[0], viewportWidth, viewportHeight);
+  top = bottom = parseValue(parts[0], viewportWidth, viewportHeight);
+  
+  if (parts[1] === 'auto') {
+    left = right = (parentWidth - elementWidth) / 2;
+  } else {
     right = left = parseValue(parts[1], viewportWidth, viewportHeight);
   }
+}
 
   else if (parts.length === 3) {
     top = parseValue(parts[0], viewportWidth, viewportHeight);
@@ -78,6 +98,7 @@ if (node.styles && node.styles.width) {
     bottom = parseValue(parts[2], viewportWidth, viewportHeight);
     left = parseValue(parts[3], viewportWidth, viewportHeight);
   }
+  
 
   return { top, right, bottom, left };
 }
