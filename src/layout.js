@@ -21,6 +21,10 @@ function parseValue(value, viewportWidth, viewportHeight){
 
 }
 
+/* The `calculateLayout` function is responsible for calculating the layout of a given node in a tree
+structure. It takes three parameters: `node` representing the current node being processed,
+`parentWidth` representing the width of the parent node, and `currentY` representing the current Y
+position in the layout. */
 function calculateLayout(node, parentWidth, currentY) {
   if (node.type === 'text') return;
 

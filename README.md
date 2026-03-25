@@ -31,8 +31,19 @@ Because I want something I can call mine.
   - [x] Day 18 — Computed Styles
   - [x] Day 19 — Full Pipeline Connected
   - [x] Day 20 — Review & Clean
-- [ ] Week 4 — Layout Engine
+- [x] Week 4 — Layout Engine
+  - [x] Day 21 — calculateLayout basics
+  - [x] Day 22 — CSS width (vw vh px)
+  - [x] Day 23 — Margin handling + auto centering
+  - [x] Day 24 — Connected to browser.js
+  - [x] Day 25 — Review & Clean
 - [ ] Week 5 — Renderer
+  - [ ] Day 26 — Open a window
+  - [ ] Day 27 — Draw rectangles
+  - [ ] Day 28 — Draw text
+  - [ ] Day 29 — Walk DOM and render
+  - [ ] Day 30 — Full render pipeline
+  - [ ] Day 31 — Review & Clean
 - [ ] Week 6 — JavaScript Support
 - [ ] Week 7 — UI, Tabs, History
 
@@ -47,17 +58,13 @@ Headers: { 'content-type': 'text/html', 'server': 'cloudflare', ... }
 --- BODY ---
 <!doctype html><html>...</html>
 
---- DOM TREE WITH STYLES ---
+--- DOM TREE WITH STYLES AND LAYOUT ---
 {
-  type: 'document',
-  children: [
-    { type: 'element', name: 'html', children: [
-        { type: 'element', name: 'head', children: [...] },
-        { type: 'element', name: 'body',
-          styles: { background: '#eee', width: '60vw', margin: '15vh auto' },
-          children: [...] }
-    ]}
-  ]
+  type: 'element',
+  name: 'body',
+  styles: { background: '#eee', width: '60vw', margin: '15vh auto' },
+  layout: { x: 160, y: 130, width: 480, height: 60 },
+  children: [...]
 }
 
 ## Architecture
@@ -83,8 +90,14 @@ Headers: { 'content-type': 'text/html', 'server': 'cloudflare', ... }
 - src/style-matcher.js    — walks DOM tree, attaches styles to matching nodes
 - src/computed-styles.js  — reads styles from any node, returns {} if none
 
+### Layout Layer
+- src/layout.js           — calculates { x, y, width, height } for every node
+                            parseValue: converts vw/vh/px CSS values to pixels
+                            parseMargin: handles all CSS margin syntax + auto
+                            calculateLayout: recursive DFS, width down, height up
+
 ### Entry Point
-- browser.js              — full pipeline: fetch → DOM → CSS → styled nodes
+- browser.js              — full pipeline: fetch → DOM → CSS → layout → output
 
 ## Modules
 
@@ -153,6 +166,15 @@ Reads node.styles attached by style matcher.
 Returns empty object if no styles matched.
 Never returns undefined — always safe to use.
 
+### Layout Engine
+Walks the entire DOM tree recursively.
+Attaches { x, y, width, height } to every element node.
+Width flows top-down from parent to children.
+Height bubbles bottom-up from children to parent.
+Reads CSS styles for explicit widths and margins.
+Converts vw, vh, px values to actual pixels.
+Handles margin: auto to center elements horizontally.
+
 ## Journal
 Day 1  — Learned how the internet works at the wire level.
           TCP handshakes, DNS, HTTP — nothing is magic anymore.
@@ -178,12 +200,21 @@ Day 17 — Style matcher. DFS again. Every node gets its styles.
 Day 18 — getComputedStyle. Simplest module. One job. Done well.
 Day 19 — Full pipeline connected. body.styles = { background: '#eee' }
 Day 20 — Week 3 complete. 13 modules. Reviewed, commented, cleaned.
-          Ready for Week 4 — Layout Engine.
+Day 21 — Layout engine born. Every node gets { x, y, width, height }.
+          Width flows down. Height bubbles up. Two passes.
+Day 22 — parseValue. CSS strings → pixels. 60vw=480. 15vh=90.
+Day 23 — parseMargin. margin: 15vh auto → centered at x:160.
+          Handled all four CSS margin syntaxes.
+Day 24 — Connected to browser.js. Full pipeline working.
+          body → { x:160, y:130, width:480, height:60 }
+Day 25 — Week 4 complete. Reviewed, commented, cleaned.
+          Ready for Week 5 — Renderer.
 
 ## What's Next
-Week 4: Layout Engine.
-Every DOM node gets exact pixel coordinates.
-{ x, y, width, height } — calculated from styles and content.
-The CSS box model implemented from scratch.
-This is where most browser projects quit.
-Courage keeps going.
+Week 5: The Renderer.
+Open a real window. Draw pixels to the screen.
+Every node.layout tells us where to draw.
+Every node.styles tells us what color to use.
+The first time a webpage appears in a window Courage opens —
+that is the moment everything becomes real.
+This is what five weeks of building has been leading to.
