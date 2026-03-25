@@ -9,6 +9,8 @@ const { innerHTML } = require('./src/innerHTML.js');
 const { tokenizeCSS } = require('./src/css-tokenizer.js');
 const { parseCSS } = require('./src/css-parser.js');
 const { styleMatcher} = require('./src/style-matcher.js');
+const {calculateLayout} = require("./src/layout.js");
+
 const url = process.argv[2];
 
 async function fetch(url){
@@ -40,7 +42,10 @@ if (styleNode) {
   const cssTokens = tokenizeCSS(css);
   const rules = parseCSS(cssTokens);
   styleMatcher(rootNode, rules);
+
 }
+calculateLayout(rootNode, 800, 0);
+
 console.log(JSON.stringify(rootNode, null, 2));
 
 
