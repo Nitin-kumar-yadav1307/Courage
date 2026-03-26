@@ -1,0 +1,27 @@
+{
+  "name": "courage",
+  "version": "1.0.0",
+  "description": "A web browser built from scratch in Node.js.\r No libraries. No shortcuts. Every line written by hand.",
+  "main": "main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nitin-kumar-yadav1307/Courage.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nitin-kumar-yadav1307/Courage#readme"
+  },
+  "homepage": "https://github.com/Nitin-kumar-yadav1307/Courage#readme",
+  "devDependencies": {
+    "electron": "^41.0.4"
+  }
+}
