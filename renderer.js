@@ -1,12 +1,33 @@
+
+const { fetch } = require('./browser.js');
+
+
 let canvas = document.querySelector('#window');
 
 let ctx = canvas.getContext('2d');
 
-ctx.fillStyle = 'red';
 
-ctx.fillRect(50, 50, 200, 100);
+function renderNode(node,ctx){
+    if (!node.children) return;
 
-ctx.fillStyle = 'blue';
-ctx.font = ' 24px sans-serif';
+    if (node.type === 'element') {
+     ctx.fillRect(node.layout.x,node.layout.y,node.layout.width,node.layout.height);
+} else if (node.type === 'text') {
+    ctx.fillText(node.value,node.layout.x,node.layout.y);
+}
+    
+   
+    for( let Node of node.children){
+   
+     renderNode(Node,ctx);
+   
+}
+} 
 
-ctx.fillText('shree ganesh',100,100)
+
+async function render() {
+    const rootNode = await fetch('http://example.com');
+    renderNode(rootNode, ctx); 
+}
+
+render();

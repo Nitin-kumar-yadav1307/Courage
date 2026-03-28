@@ -2,7 +2,14 @@ const {app,BrowserWindow} = require("electron");
 const path = require('path');
 
 function createWindow(){
-    let window = new BrowserWindow({});
+   const window = new BrowserWindow({
+    width: 1024,
+    height: 768,
+    webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false
+    }
+});
     window.loadFile('renderer.html')
 }
 

@@ -11,7 +11,8 @@ const { parseCSS } = require('./src/css-parser.js');
 const { styleMatcher} = require('./src/style-matcher.js');
 const {calculateLayout} = require("./src/layout.js");
 
-const url = process.argv[2];
+//const url = process.argv[2];
+
 
 async function fetch(url){
   const {host,port,protocol,path} = parseURL(url);
@@ -48,7 +49,9 @@ calculateLayout(rootNode, 800, 0);
 
 console.log(JSON.stringify(rootNode, null, 2));
 
-
+return rootNode;
 }
 
-fetch(url);
+
+
+module.exports = { fetch };
