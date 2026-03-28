@@ -14,7 +14,7 @@ const {calculateLayout} = require("./src/layout.js");
 //const url = process.argv[2];
 
 
-async function fetch(url){
+async function fetch(url, viewportWidth, viewportHeight) {
   const {host,port,protocol,path} = parseURL(url);
 
   const rawResponse = await  sendRequest(host,port,path,protocol);
@@ -45,8 +45,7 @@ if (styleNode) {
   styleMatcher(rootNode, rules);
 
 }
-calculateLayout(rootNode, 800, 0);
-
+calculateLayout(rootNode, viewportWidth, 0, viewportWidth, viewportHeight);
 console.log(JSON.stringify(rootNode, null, 2));
 
 return rootNode;

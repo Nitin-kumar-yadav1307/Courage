@@ -1,6 +1,5 @@
 
-const VIEWPORT_WIDTH = 800;
-const VIEWPORT_HEIGHT = 600;
+
 
 
 function parseValue(value, viewportWidth, viewportHeight){
@@ -25,7 +24,7 @@ function parseValue(value, viewportWidth, viewportHeight){
 structure. It takes three parameters: `node` representing the current node being processed,
 `parentWidth` representing the width of the parent node, and `currentY` representing the current Y
 position in the layout. */
-function calculateLayout(node, parentWidth, currentY) {
+function calculateLayout(node, parentWidth, currentY, viewportWidth, viewportHeight)  {
   if (node.type === 'text') return;
 
   let layout = {x:0,y:currentY,width:parentWidth,height:0};
@@ -35,7 +34,7 @@ function calculateLayout(node, parentWidth, currentY) {
   
 
 if (node.styles && node.styles.width) {
-  node.layout.width = parseValue(node.styles.width, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+  node.layout.width = parseValue(node.styles.width, viewportWidth, viewportHeight);
 }
 
 let childY = currentY;
@@ -43,11 +42,11 @@ let childY = currentY;
 if (node.styles && node.styles.margin) {
   const margin = parseMargin(
     node.styles.margin,
-    VIEWPORT_WIDTH,
-    VIEWPORT_HEIGHT,
+    viewportWidth,
+    viewportHeight,
     node.layout.width,
     parentWidth
-  );
+);
   node.layout.x = margin.left;
   node.layout.y = currentY + margin.top;
   childY = node.layout.y;
@@ -58,7 +57,7 @@ if (node.styles && node.styles.margin) {
   if (Node.type === 'text') {
     childY += 20; // default line height
   } else {
-    calculateLayout(Node, parentWidth, childY);
+    calculateLayout(Node, parentWidth, childY, viewportWidth, viewportHeight);
     if (Node.layout) {
       childY += Node.layout.height;
     }

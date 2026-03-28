@@ -4,29 +4,37 @@ const { fetch } = require('./browser.js');
 
 let canvas = document.querySelector('#window');
 
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
 let ctx = canvas.getContext('2d');
 
 
-function renderNode(node,ctx){
-    if (!node.children) return;
-
-    if (node.type === 'element') {
-     ctx.fillRect(node.layout.x,node.layout.y,node.layout.width,node.layout.height);
-} else if (node.type === 'text') {
-    ctx.fillText(node.value,node.layout.x,node.layout.y);
-}
+function renderNode(node, ctx, parentNode) {
     
-   
-    for( let Node of node.children){
-   
-     renderNode(Node,ctx);
-   
+    if (node.type === 'text') {
+         if (parentNode && (parentNode.name === 'style' || parentNode.name === 'head' || parentNode.name === 'title')) return;
+        ctx.fillStyle = '#333333';
+        ctx.font = '16px sans-serif';
+        ctx.fillText(node.value, parentNode.layout.x, parentNode.layout.y + 16);
+        return;
+    }
+
+    if (!node.layout) return;
+
+    if (node.styles && node.styles.background) {
+        ctx.fillStyle = node.styles.background;
+        ctx.fillRect(node.layout.x, node.layout.y, node.layout.width, node.layout.height);
+    }
+
+    for (let child of node.children) {
+        renderNode(child, ctx, node);
+    }
 }
-} 
 
 
 async function render() {
-    const rootNode = await fetch('http://example.com');
+    const rootNode = await fetch('http://example.com', window.innerWidth, window.innerHeight);
     renderNode(rootNode, ctx); 
 }
 
