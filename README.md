@@ -37,35 +37,26 @@ Because I want something I can call mine.
   - [x] Day 23 — Margin handling + auto centering
   - [x] Day 24 — Connected to browser.js
   - [x] Day 25 — Review & Clean
-- [ ] Week 5 — Renderer
-  - [ ] Day 26 — Open a window
-  - [ ] Day 27 — Draw rectangles
-  - [ ] Day 28 — Draw text
-  - [ ] Day 29 — Walk DOM and render
-  - [ ] Day 30 — Full render pipeline
-  - [ ] Day 31 — Review & Clean
+- [x] Week 5 — Renderer
+  - [x] Day 26 — Open a window
+  - [x] Day 27 — Draw rectangles
+  - [x] Day 28 — Draw text
+  - [x] Day 29 — Walk DOM and render
+  - [x] Day 30 — Full render pipeline
+  - [x] Day 31 — Review & Clean
 - [ ] Week 6 — JavaScript Support
 - [ ] Week 7 — UI, Tabs, History
 
 ## Run it
-node browser.js https://example.com
+```bash
+npm start
+```
 
 ## Output
-Status Code: 200
-Status Text: OK
-Headers: { 'content-type': 'text/html', 'server': 'cloudflare', ... }
-
---- BODY ---
-<!doctype html><html>...</html>
-
---- DOM TREE WITH STYLES AND LAYOUT ---
-{
-  type: 'element',
-  name: 'body',
-  styles: { background: '#eee', width: '60vw', margin: '15vh auto' },
-  layout: { x: 160, y: 130, width: 480, height: 60 },
-  children: [...]
-}
+A real OS window opens.
+example.com is fetched, parsed, laid out, and painted on screen.
+Real text. Real colors. Real centered layout.
+Built from scratch. Every line by hand.
 
 ## Architecture
 
@@ -95,9 +86,18 @@ Headers: { 'content-type': 'text/html', 'server': 'cloudflare', ... }
                             parseValue: converts vw/vh/px CSS values to pixels
                             parseMargin: handles all CSS margin syntax + auto
                             calculateLayout: recursive DFS, width down, height up
+                            parentX flows down so children inherit correct position
+
+### Renderer Layer
+- main.js        — Electron entry point. Creates the OS window.
+- renderer.html  — Canvas surface loaded inside the Electron window.
+- renderer.js    — Walks the layout tree using DFS.
+                   Paints rectangles and text using Canvas API.
+                   wrapText: word wrap algorithm using ctx.measureText.
+                   Filters head/style/title nodes from rendering.
 
 ### Entry Point
-- browser.js              — full pipeline: fetch → DOM → CSS → layout → output
+- browser.js     — full pipeline: fetch → DOM → CSS → layout → export
 
 ## Modules
 
@@ -171,9 +171,19 @@ Walks the entire DOM tree recursively.
 Attaches { x, y, width, height } to every element node.
 Width flows top-down from parent to children.
 Height bubbles bottom-up from children to parent.
+parentX flows down so children inherit correct x position.
 Reads CSS styles for explicit widths and margins.
 Converts vw, vh, px values to actual pixels.
 Handles margin: auto to center elements horizontally.
+
+### Renderer
+Walks the layout tree using DFS recursion.
+For element nodes — draws background rectangle if background style exists.
+For text nodes — wraps text using measureText, draws line by line.
+Filters out head, style, title nodes from rendering.
+Uses Canvas 2D API — fillRect for boxes, fillText for text.
+Electron provides the window. Canvas provides the surface.
+Every pixel placed by hand.
 
 ## Journal
 Day 1  — Learned how the internet works at the wire level.
@@ -209,12 +219,22 @@ Day 24 — Connected to browser.js. Full pipeline working.
           body → { x:160, y:130, width:480, height:60 }
 Day 25 — Week 4 complete. Reviewed, commented, cleaned.
           Ready for Week 5 — Renderer.
+Day 26 — Electron window opened for the first time.
+          Courage has a face now.
+Day 27 — Drew the first rectangle on canvas.
+          ctx.fillRect. Four numbers. A shape on screen.
+Day 28 — Drew the first text. "Shree Ganesh."
+          The first words Courage ever wrote.
+Day 29 — Connected the full pipeline to the renderer.
+          DOM tree walking. Real elements on screen.
+Day 30 — Full render pipeline complete.
+          example.com rendered in Courage Browser.
+          Real text. Real colors. Real layout.
+Day 31 — Word wrap algorithm implemented.
+          Text stays inside its container.
+          Week 5 complete. Courage is a real browser.
 
 ## What's Next
-Week 5: The Renderer.
-Open a real window. Draw pixels to the screen.
-Every node.layout tells us where to draw.
-Every node.styles tells us what color to use.
-The first time a webpage appears in a window Courage opens —
-that is the moment everything becomes real.
-This is what five weeks of building has been leading to.
+Week 6: JavaScript Engine.
+Embed V8. Allow Courage to execute scripts.
+Let webpages come alive.
