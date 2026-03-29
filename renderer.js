@@ -10,13 +10,42 @@ canvas.height = window.innerHeight;
 let ctx = canvas.getContext('2d');
 
 
+function wrapText(ctx, text, maxWidth) {
+   
+    let lines = []
+    let currentLines = "";
+
+    let words = text.split(" ");
+
+    for(let word of words ){
+        let testLine = currentLines ? currentLines + " " + word : word;
+      let testWidth =   ctx.measureText(testLine).width;
+      if(testWidth>maxWidth){
+        lines.push(currentLines);
+        currentLines = word;
+      }
+      else{
+        currentLines = testLine;
+      }
+
+    }
+
+    lines.push(currentLines);
+    return  lines;
+    // returns array of lines
+}
+
+
 function renderNode(node, ctx, parentNode) {
     
     if (node.type === 'text') {
          if (parentNode && (parentNode.name === 'style' || parentNode.name === 'head' || parentNode.name === 'title')) return;
         ctx.fillStyle = '#333333';
         ctx.font = '16px sans-serif';
-        ctx.fillText(node.value, parentNode.layout.x, parentNode.layout.y + 16);
+        const lines = wrapText(ctx, node.value, parentNode.layout.width );
+        lines.forEach((line, index) => {
+        ctx.fillText(line, parentNode.layout.x, parentNode.layout.y + 16 + (index * 20));
+        });
         return;
     }
 

@@ -24,10 +24,10 @@ function parseValue(value, viewportWidth, viewportHeight){
 structure. It takes three parameters: `node` representing the current node being processed,
 `parentWidth` representing the width of the parent node, and `currentY` representing the current Y
 position in the layout. */
-function calculateLayout(node, parentWidth, currentY, viewportWidth, viewportHeight)  {
+function calculateLayout(node, parentWidth, currentY, viewportWidth, viewportHeight, parentX = 0)  {
   if (node.type === 'text') return;
 
-  let layout = {x:0,y:currentY,width:parentWidth,height:0};
+  let layout = {x:parentX,y:currentY,width:parentWidth,height:0};
 
   node.layout = layout;
 
@@ -57,7 +57,7 @@ if (node.styles && node.styles.margin) {
   if (Node.type === 'text') {
     childY += 20; // default line height
   } else {
-    calculateLayout(Node, parentWidth, childY, viewportWidth, viewportHeight);
+   calculateLayout(Node, node.layout.width, childY, viewportWidth, viewportHeight, node.layout.x);
     if (Node.layout) {
       childY += Node.layout.height;
     }
