@@ -39,7 +39,10 @@ function wrapText(ctx, text, maxWidth) {
 function renderNode(node, ctx, parentNode) {
     
     if (node.type === 'text') {
-         if (parentNode && (parentNode.name === 'style' || parentNode.name === 'head' || parentNode.name === 'title')) return;
+        if (parentNode && (parentNode.name === 'style' || 
+                   parentNode.name === 'head' || 
+                   parentNode.name === 'title' ||
+                   parentNode.name === 'script')) return;
         ctx.fillStyle = '#333333';
         ctx.font = '16px sans-serif';
         const lines = wrapText(ctx, node.value, parentNode.layout.width );
