@@ -1,10 +1,15 @@
 
 const { fetch } = require('./browser.js');
-
-let buttton = document.querySelector('#go');
+let history = [];
+let currentIndex = history.length - 1;
+const button = document.querySelector('#go');
 let url = ''
 let canvas = document.querySelector('#window');
 const toolbar = document.getElementById('toolbar');
+const backButton = document.querySelector('#backword');
+const farwordButton = document.querySelector('#farword');
+
+
 
 canvas.height = window.innerHeight - toolbar.offsetHeight;
 canvas.width = window.innerWidth;
@@ -12,11 +17,32 @@ canvas.width = window.innerWidth;
 
 let ctx = canvas.getContext('2d');
 
-buttton.addEventListener('click', function (){
+button.addEventListener('click', function (){
     console.log('clicked')
      url = document.getElementById('addressbar').value;
+     history.push(url);
+     currentIndex = history.length - 1;
      render(url);
 });
+
+backButton.addEventListener('click', function(){
+    console.log('clicked');
+    if(currentIndex > 0){
+        currentIndex--;
+        document.getElementById('addressbar').value = history[currentIndex];
+        render(history[currentIndex]);
+    }
+});
+
+farwordButton.addEventListener('click', function(){
+    console.log('clicked');
+    if(currentIndex < history.length-1){
+        currentIndex++;
+        document.getElementById('addressbar').value = history[currentIndex];
+        render(history[currentIndex]);
+    }
+});
+
 
 
 function wrapText(ctx, text, maxWidth) {
