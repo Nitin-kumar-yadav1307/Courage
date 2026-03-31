@@ -8,6 +8,38 @@
 <style>
     * { margin: 0; padding: 0; }
     body { display: flex; flex-direction: column; }
+
+    #toolbar{
+        background-color: #1b1b1f;
+        padding: 6px;
+         display: flex;
+         align-items: center;
+          gap: 6px;
+    }
+
+    #addressbar{
+        flex : 1;
+        padding: 6px 12px ;
+        border-radius: 20px;
+        border: none;
+        background: #3b3b3f;
+        color: white;
+        outline: none;
+    }
+  button{
+    background: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  button:hover {
+    background: #3b3b3f;
+}
+
 </style>
 <body>
   <div id =toolbar>
