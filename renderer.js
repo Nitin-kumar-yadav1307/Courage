@@ -1,13 +1,22 @@
 
 const { fetch } = require('./browser.js');
 
-
+let buttton = document.querySelector('#go');
+let url = ''
 let canvas = document.querySelector('#window');
+const toolbar = document.getElementById('toolbar');
 
+canvas.height = window.innerHeight - toolbar.offsetHeight;
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+
 
 let ctx = canvas.getContext('2d');
+
+buttton.addEventListener('click', function (){
+    console.log('clicked')
+     url = document.getElementById('addressbar').value;
+     render(url);
+});
 
 
 function wrapText(ctx, text, maxWidth) {
@@ -66,10 +75,9 @@ function renderNode(node, ctx, parentNode) {
 }
 
 
-async function render() {
-    const rootNode = await fetch('http://example.com', window.innerWidth, window.innerHeight);
+async function render(url) {
+    const rootNode = await fetch(url, window.innerWidth, window.innerHeight);
      ctx.clearRect(0, 0, canvas.width, canvas.height);
     renderNode(rootNode, ctx); 
 }
 
-render();
