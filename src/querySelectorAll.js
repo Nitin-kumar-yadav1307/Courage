@@ -11,7 +11,7 @@
  */
 function querySelectorAll(node,tagName){
     let queries = [];
-    if(node.name == tagName){
+    if(node.name == tagName || tagName == '*'){
      queries.push(node);
 }
 

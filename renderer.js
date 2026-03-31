@@ -43,6 +43,7 @@ function renderNode(node, ctx, parentNode) {
                    parentNode.name === 'head' || 
                    parentNode.name === 'title' ||
                    parentNode.name === 'script')) return;
+                   
         ctx.fillStyle = '#333333';
         ctx.font = '16px sans-serif';
         const lines = wrapText(ctx, node.value, parentNode.layout.width );
@@ -67,6 +68,7 @@ function renderNode(node, ctx, parentNode) {
 
 async function render() {
     const rootNode = await fetch('http://example.com', window.innerWidth, window.innerHeight);
+     ctx.clearRect(0, 0, canvas.width, canvas.height);
     renderNode(rootNode, ctx); 
 }
 
