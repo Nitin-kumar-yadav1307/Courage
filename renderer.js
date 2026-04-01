@@ -8,6 +8,7 @@ let canvas = document.querySelector('#window');
 const toolbar = document.getElementById('toolbar');
 const backButton = document.querySelector('#backword');
 const farwordButton = document.querySelector('#farword');
+const reloadButton = document.querySelector('#reload');
 
 
 
@@ -42,6 +43,10 @@ farwordButton.addEventListener('click', function(){
         render(history[currentIndex]);
     }
 });
+
+reloadButton.addEventListener('click', function(){
+    render(document.getElementById('addressbar').value);
+})
 
 
 
