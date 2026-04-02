@@ -1,7 +1,11 @@
 
 const { fetch } = require('./browser.js');
+const { querySelector } = require('./src/querySelector.js');
+let tabs = [];
+let activeTab = 0;
 let history = [];
 let currentIndex = history.length - 1;
+const addButton = document.querySelector('#addTab');
 const button = document.querySelector('#go');
 let url = ''
 let canvas = document.querySelector('#window');
@@ -17,6 +21,20 @@ canvas.width = window.innerWidth;
 
 
 let ctx = canvas.getContext('2d');
+
+function createTab(){
+    let tab = { url: '', history: [], currentIndex: -1 };
+    tabs.push(tab);
+    let tabElement = document.createElement('div');
+    tabElement.className = 'tab';
+    tabElement.textContent = 'New Tab';
+    let addButton = document.querySelector('#addTab');
+    addButton.parentNode.insertBefore(tabElement, addButton);
+}
+
+addButton.addEventListener('click', function(){
+   createTab();
+});
 
 button.addEventListener('click', function (){
     console.log('clicked')

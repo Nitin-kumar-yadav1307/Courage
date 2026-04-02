@@ -40,8 +40,52 @@
     background: #3b3b3f;
 }
 
+#tabBar {
+    background: #111113;
+    display: flex;
+    align-items: center;
+    padding: 4px 4px 0 4px;
+    gap: 4px;
+}
+.tab {
+    background: #2b2b2f;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 100px;
+    max-width: 200px;
+}
+.tab.active {
+    background: #1b1b1f;
+}
+
+.tab .close {
+    font-size: 11px;
+    opacity: 0.6;
+}
+
+.tab .close:hover {
+    opacity: 1;
+}
+
+#newTab {
+    font-size: 18px;
+    padding: 4px 10px;
+}
+
 </style>
 <body>
+
+  
+    <div id="tabBar">
+    <button id="addTab">+</button>
+</div>
+  
   <div id =toolbar>
      <button id="backword">&#8592;</button>
     <button id="farword">&#8594;</button>
