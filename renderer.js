@@ -1,5 +1,4 @@
 const { fetch } = require('./browser.js');
-const { querySelector } = require('./src/querySelector.js');
 let tabs = [];
 let activeTab = 0;
 let history = [];
@@ -18,12 +17,16 @@ const reloadButton = document.querySelector('#reload');
 canvas.height = window.innerHeight - toolbar.offsetHeight;
 canvas.width = window.innerWidth;
 
-
+// for default tab
 let ctx = canvas.getContext('2d');
 createTab();
+
+
 function createTab(){
+
     let tab = { url: '', history: [], currentIndex: -1 };
     tabs.push(tab);
+
     let tabElement = document.createElement('div');
     tabElement.className = 'tab';
     tabElement.textContent = 'New Tab';
@@ -31,6 +34,8 @@ function createTab(){
     deleteButton.className = 'deleteButton';
     deleteButton.textContent = 'x';
     tabElement.appendChild(deleteButton);
+
+    // tab click event
     tabElement.addEventListener('click', function(){
       let Tabs =  document.querySelectorAll('.tab');
       activeTab = tabs.indexOf(tab);
@@ -46,6 +51,8 @@ function createTab(){
       }
       tabElement.classList.add('active') ;
     });
+
+    // delete tab
     deleteButton.addEventListener('click', function(e){
            e.stopPropagation();
         tabElement.remove(); 
@@ -62,10 +69,13 @@ function createTab(){
     tabElement.classList.add('active');
 }
 
+
+// add tab
 addButton.addEventListener('click', function(){
    createTab();
 });
 
+// Go button
 button.addEventListener('click', function (){
     console.log('clicked')
      url = document.getElementById('addressbar').value;
@@ -75,6 +85,7 @@ button.addEventListener('click', function (){
      render(url);
 });
 
+// back button
 backButton.addEventListener('click', function(){
     console.log('clicked');
     if(tabs[activeTab].currentIndex > 0){
@@ -84,6 +95,7 @@ backButton.addEventListener('click', function(){
     }
 });
 
+// farword button
 farwordButton.addEventListener('click', function(){
     console.log('clicked');
     if(tabs[activeTab].currentIndex< tabs[activeTab].history.length-1){
@@ -93,12 +105,13 @@ farwordButton.addEventListener('click', function(){
     }
 });
 
+// reload button
 reloadButton.addEventListener('click', function(){
     render(document.getElementById('addressbar').value);
 })
 
 
-
+// it wraps the text which goes out side the parent elemnt
 function wrapText(ctx, text, maxWidth) {
    
     let lines = []
@@ -109,6 +122,7 @@ function wrapText(ctx, text, maxWidth) {
     for(let word of words ){
         let testLine = currentLines ? currentLines + " " + word : word;
       let testWidth =   ctx.measureText(testLine).width;
+
       if(testWidth>maxWidth){
         lines.push(currentLines);
         currentLines = word;
@@ -120,8 +134,8 @@ function wrapText(ctx, text, maxWidth) {
     }
 
     lines.push(currentLines);
-    return  lines;
-    // returns array of lines
+    return  lines;  // returns array of lines
+
 }
 
 
@@ -153,6 +167,7 @@ function renderNode(node, ctx, parentNode) {
         renderNode(child, ctx, node);
     }
 }
+
 
 
 async function render(url) {
