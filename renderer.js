@@ -28,6 +28,21 @@ function createTab(){
     let tabElement = document.createElement('div');
     tabElement.className = 'tab';
     tabElement.textContent = 'New Tab';
+    let deleteButton = document.createElement('button')
+    deleteButton.className = 'deleteButton';
+    deleteButton.textContent = 'x';
+    tabElement.appendChild(deleteButton);
+    tabElement.addEventListener('click', function(){
+      let tabs =  document.querySelectorAll('.tab');
+      for(tab of tabs){
+        tab.classList.remove('active');
+      }
+      tabElement.classList.add('active') ;
+    });
+    deleteButton.addEventListener('click', function(){
+           event.stopPropagation();
+        tabElement.remove(); 
+    });
     let addButton = document.querySelector('#addTab');
     addButton.parentNode.insertBefore(tabElement, addButton);
 }
