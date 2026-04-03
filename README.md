@@ -224,14 +224,21 @@ stopPropagation prevents delete click from bubbling to tab click.
 ## Journal
 Day 1  — Learned how the internet works at the wire level.
           TCP handshakes, DNS, HTTP — nothing is magic anymore.
+
 Day 2  — Built the URL parser. 5/5 tests passing.
+
 Day 3  — Built the TCP socket. Connected to example.com:80.
           That moment when 'connected successfully' printed — unforgettable.
+
 Day 4  — Built the HTTP request. Courage fetched the world's
+
           first website — info.cern.ch. Still running after 30 years.
 Day 5  — Built the response parser. 4/4 tests passing.
+
 Day 6  — Connected everything. One command. Real structured data.
+
 Day 7  — Week 1 complete. Reviewed, commented, cleaned.
+
 Day 8  — Built the HTML tokenizer. < starts a tag. > ends it.
 Day 9  — Built the DOM tree using a stack. DSA in real life.
 Day 10 — Connected networking to parsing. One full pipeline.
