@@ -240,60 +240,98 @@ Day 6  — Connected everything. One command. Real structured data.
 Day 7  — Week 1 complete. Reviewed, commented, cleaned.
 
 Day 8  — Built the HTML tokenizer. < starts a tag. > ends it.
+
 Day 9  — Built the DOM tree using a stack. DSA in real life.
+
 Day 10 — Connected networking to parsing. One full pipeline.
+
 Day 11 — Attributes, self-closing tags, querySelector.
+
 Day 12 — querySelectorAll and innerHTML. DOM API complete.
+
 Day 13 — Week 2 complete. Nine modules. Every line by hand.
+
 Day 14 — HTTPS working. Fetched github.com, wikipedia.org, Jal Mitra.
+
           Wikipedia said no without User-Agent. Added Courage/1.0. It said yes.
+
 Day 15 — CSS tokenizer. { } : ; are the landmarks.
+
 Day 16 — CSS parser. Flat tokens → structured rules.
+
 Day 17 — Style matcher. DFS again. Every node gets its styles.
+
 Day 18 — getComputedStyle. Simplest module. One job. Done well.
+
 Day 19 — Full pipeline connected. body.styles = { background: '#eee' }
+
 Day 20 — Week 3 complete. 13 modules. Reviewed, commented, cleaned.
+
 Day 21 — Layout engine born. Every node gets { x, y, width, height }.
+
           Width flows down. Height bubbles up. Two passes.
+
 Day 22 — parseValue. CSS strings → pixels. 60vw=480. 15vh=90.
+
 Day 23 — parseMargin. margin: 15vh auto → centered at x:160.
           Handled all four CSS margin syntaxes.
+
 Day 24 — Connected to browser.js. Full pipeline working.
+
           body → { x:160, y:130, width:480, height:60 }
+          
 Day 25 — Week 4 complete. Reviewed, commented, cleaned.
           Ready for Week 5 — Renderer.
+
 Day 26 — Electron window opened for the first time.
           Courage has a face now.
+
 Day 27 — Drew the first rectangle on canvas.
           ctx.fillRect. Four numbers. A shape on screen.
+
 Day 28 — Drew the first text. "Shree Ganesh."
           The first words Courage ever wrote.
+
 Day 29 — Connected the full pipeline to the renderer.
           DOM tree walking. Real elements on screen.
+
 Day 30 — Full render pipeline complete.
           example.com rendered in Courage Browser.
           Real text. Real colors. Real layout.
+
 Day 31 — Word wrap algorithm implemented.
+
           Text stays inside its container.
+
           Week 5 complete. Courage is a real browser.
+
 Day 32 — eval() wired up. Webpage JS executes inside Courage.
+
           console.log confirmed working. But document was Electron's, not ours.
+
 Day 33 — Built fake document object in browser.js.
           querySelector, getElementById, body — all pointing to Courage's DOM.
           Injected before eval(). Webpages can now touch our tree.
+          
 Day 34 — textContent setter built with Object.defineProperty.
           JS mutation confirmed — canvas re-rendered with changed content.
           "Hello from JavaScript!" painted by Courage. Week 6 complete.
+
 Day 35 — Toolbar added to renderer.html.
           Back, forward, reload, address bar, GO button. All wired up.
+
 Day 36 — Dark Brave-inspired theme applied.
           Canvas resized to fill below toolbar. example.com loads via address bar.
+          
 Day 37 — History navigation. Back and forward working.
           Array + index. Same pattern as browser history in real browsers.
+
 Day 38 — Reload button wired. One line. Clean.
+
 Day 39 — Tabs. createTab() builds tab object and DOM element together.
           insertBefore keeps + at the end. classList manages active state.
           Delete button with stopPropagation. New DOM methods learned.
+
 Day 40 — Tab switching. Each tab owns its url, history, currentIndex.
           Address bar syncs on tab click. Canvas clears for empty tabs.
           Week 7 complete. Courage has tabs, navigation, and history.
