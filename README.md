@@ -44,8 +44,22 @@ Because I want something I can call mine.
   - [x] Day 29 — Walk DOM and render
   - [x] Day 30 — Full render pipeline
   - [x] Day 31 — Review & Clean
-- [ ] Week 6 — JavaScript Support
-- [ ] Week 7 — UI, Tabs, History
+- [x] Week 6 — JavaScript Engine
+  - [x] Day 32 — eval() wired up. Webpage scripts execute.
+  - [x] Day 33 — Fake document object built in browser.js.
+                  querySelector, getElementById, body — all wired to Courage's DOM.
+  - [x] Day 34 — textContent setter via Object.defineProperty.
+                  JS-driven DOM mutation confirmed. Canvas re-renders with new content.
+  - [x] Day 35 — Review & Clean
+- [x] Week 7 — UI, Tabs, History
+  - [x] Day 35 — Toolbar added. Back, forward, reload buttons. Address bar. GO button.
+  - [x] Day 36 — Dark theme applied. Canvas resized to fill below toolbar.
+                  http://example.com loads via address bar.
+  - [x] Day 37 — History navigation. Back and forward working with array + index.
+  - [x] Day 38 — Reload button wired up.
+  - [x] Day 39 — Tabs. Create, delete, active highlighting. insertBefore, classList, stopPropagation.
+  - [x] Day 40 — Tab switching. Address bar syncs per tab. Canvas clears on empty tab.
+                  Cleanup and README update. Week 7 complete.
 
 ## Run it
 ```bash
@@ -56,7 +70,7 @@ npm start
 A real OS window opens.
 example.com is fetched, parsed, laid out, and painted on screen.
 Real text. Real colors. Real centered layout.
-Built from scratch. Every line by hand.
+Tabs. Navigation. History. All built by hand.
 
 ## Architecture
 
@@ -90,11 +104,18 @@ Built from scratch. Every line by hand.
 
 ### Renderer Layer
 - main.js        — Electron entry point. Creates the OS window.
-- renderer.html  — Canvas surface loaded inside the Electron window.
+- renderer.html  — Canvas surface + toolbar UI loaded inside the Electron window.
 - renderer.js    — Walks the layout tree using DFS.
                    Paints rectangles and text using Canvas API.
                    wrapText: word wrap algorithm using ctx.measureText.
                    Filters head/style/title nodes from rendering.
+                   Manages tabs, history, navigation per tab.
+
+### JavaScript Engine
+- browser.js     — full pipeline: fetch → DOM → CSS → layout → JS execution
+                   Fake document object injected before eval(js).
+                   querySelector, getElementById, body all wired to Courage's DOM.
+                   textContent setter via Object.defineProperty on every element node.
 
 ### Entry Point
 - browser.js     — full pipeline: fetch → DOM → CSS → layout → export
@@ -176,6 +197,13 @@ Reads CSS styles for explicit widths and margins.
 Converts vw, vh, px values to actual pixels.
 Handles margin: auto to center elements horizontally.
 
+### JavaScript Engine
+Extracts all script tags from the DOM after parsing.
+Builds a fake document object with querySelector, getElementById, body.
+All methods point to Courage's own DOM tree, not Electron's.
+textContent setter uses Object.defineProperty on every element node.
+Executes scripts using eval(). Canvas re-renders after JS runs.
+
 ### Renderer
 Walks the layout tree using DFS recursion.
 For element nodes — draws background rectangle if background style exists.
@@ -184,6 +212,14 @@ Filters out head, style, title nodes from rendering.
 Uses Canvas 2D API — fillRect for boxes, fillText for text.
 Electron provides the window. Canvas provides the surface.
 Every pixel placed by hand.
+
+### UI Layer
+Toolbar with back, forward, reload buttons and address bar.
+Tab bar above the toolbar. Each tab is a DOM div created dynamically.
+Tabs store their own url, history array and currentIndex.
+Active tab highlighted with CSS class. Switching tabs restores address bar and canvas.
+insertBefore keeps + button always at the end of the tab bar.
+stopPropagation prevents delete click from bubbling to tab click.
 
 ## Journal
 Day 1  — Learned how the internet works at the wire level.
@@ -233,8 +269,30 @@ Day 30 — Full render pipeline complete.
 Day 31 — Word wrap algorithm implemented.
           Text stays inside its container.
           Week 5 complete. Courage is a real browser.
+Day 32 — eval() wired up. Webpage JS executes inside Courage.
+          console.log confirmed working. But document was Electron's, not ours.
+Day 33 — Built fake document object in browser.js.
+          querySelector, getElementById, body — all pointing to Courage's DOM.
+          Injected before eval(). Webpages can now touch our tree.
+Day 34 — textContent setter built with Object.defineProperty.
+          JS mutation confirmed — canvas re-rendered with changed content.
+          "Hello from JavaScript!" painted by Courage. Week 6 complete.
+Day 35 — Toolbar added to renderer.html.
+          Back, forward, reload, address bar, GO button. All wired up.
+Day 36 — Dark Brave-inspired theme applied.
+          Canvas resized to fill below toolbar. example.com loads via address bar.
+Day 37 — History navigation. Back and forward working.
+          Array + index. Same pattern as browser history in real browsers.
+Day 38 — Reload button wired. One line. Clean.
+Day 39 — Tabs. createTab() builds tab object and DOM element together.
+          insertBefore keeps + at the end. classList manages active state.
+          Delete button with stopPropagation. New DOM methods learned.
+Day 40 — Tab switching. Each tab owns its url, history, currentIndex.
+          Address bar syncs on tab click. Canvas clears for empty tabs.
+          Week 7 complete. Courage has tabs, navigation, and history.
+          40 days. Built from scratch. Every line by hand.
 
 ## What's Next
-Week 6: JavaScript Engine.
-Embed V8. Allow Courage to execute scripts.
-Let webpages come alive.
+Week 8: Bug fixes and polish.
+Fix text line overlap. Respect font sizes. Render anchor tags.
+Make more websites load correctly.
