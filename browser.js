@@ -16,8 +16,11 @@ async function fetch(url, viewportWidth, viewportHeight) {
   const {host, port, protocol, path} = parseURL(url);
 
   const rawResponse = await sendRequest(host, port, path, protocol);
+  console.log(rawResponse.slice(0, 500));
 
   const {statusCode, statusText, headersObject, body} = parseResponse(rawResponse);
+
+  
 
   if (statusCode === 301 || statusCode === 302) {
     const newUrl = headersObject['location'];
@@ -25,7 +28,8 @@ async function fetch(url, viewportWidth, viewportHeight) {
     return fetch(newUrl, viewportWidth, viewportHeight);
   }
 
-  const tokens = tokenize(body);
+  
+ const tokens = tokenize(body);
   const rootNode = buildDOM(tokens);
 
   const allNodes = querySelectorAll(rootNode, '*');
@@ -49,6 +53,7 @@ async function fetch(url, viewportWidth, viewportHeight) {
     body: querySelector(rootNode, 'body') 
   }
 
+  
   const styleNode = querySelector(rootNode, 'style');
   if (styleNode) {
     const css = innerHTML(styleNode);
@@ -57,12 +62,18 @@ async function fetch(url, viewportWidth, viewportHeight) {
     styleMatcher(rootNode, rules);
   }
 
+  
   calculateLayout(rootNode, viewportWidth, 0, viewportWidth, viewportHeight);
 
+  
   let scriptNode = querySelector(rootNode, 'script');
   if (scriptNode) {
     let js = innerHTML(scriptNode);
+   try {
     eval(js);
+} catch(e) {
+    console.log('JS eval error:', e.message);
+}
     calculateLayout(rootNode, viewportWidth, 0, viewportWidth, viewportHeight);
   }
 

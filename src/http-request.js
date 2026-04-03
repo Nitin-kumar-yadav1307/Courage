@@ -5,6 +5,7 @@ async function sendRequest(host,port,path,protocol){
   'GET ' + path + ' HTTP/1.1\r\n' +
   'Host: ' + host + '\r\n' +
   'User-Agent: Courage/1.0 (Browser from scratch)\r\n' +
+  'Accept-Encoding: identity\r\n' +
   'Connection: close\r\n' +
   '\r\n';
 
