@@ -1,4 +1,3 @@
-
 const { fetch } = require('./browser.js');
 const { querySelector } = require('./src/querySelector.js');
 let tabs = [];
@@ -21,7 +20,7 @@ canvas.width = window.innerWidth;
 
 
 let ctx = canvas.getContext('2d');
-
+createTab();
 function createTab(){
     let tab = { url: '', history: [], currentIndex: -1 };
     tabs.push(tab);
@@ -33,18 +32,34 @@ function createTab(){
     deleteButton.textContent = 'x';
     tabElement.appendChild(deleteButton);
     tabElement.addEventListener('click', function(){
-      let tabs =  document.querySelectorAll('.tab');
-      for(tab of tabs){
-        tab.classList.remove('active');
+      let Tabs =  document.querySelectorAll('.tab');
+      activeTab = tabs.indexOf(tab);
+      document.getElementById('addressbar').value = tab.url;
+      if(!tab.url){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      else{
+        render(tab.url);
+      }
+      for(Tab of Tabs){
+        Tab.classList.remove('active');
       }
       tabElement.classList.add('active') ;
     });
-    deleteButton.addEventListener('click', function(){
-           event.stopPropagation();
+    deleteButton.addEventListener('click', function(e){
+           e.stopPropagation();
         tabElement.remove(); 
     });
     let addButton = document.querySelector('#addTab');
     addButton.parentNode.insertBefore(tabElement, addButton);
+
+    let Tabs =  document.querySelectorAll('.tab');
+     
+      for(Tab of Tabs){
+        Tab.classList.remove('active');
+      }
+    activeTab = tabs.length - 1;
+    tabElement.classList.add('active');
 }
 
 addButton.addEventListener('click', function(){
@@ -54,26 +69,27 @@ addButton.addEventListener('click', function(){
 button.addEventListener('click', function (){
     console.log('clicked')
      url = document.getElementById('addressbar').value;
-     history.push(url);
-     currentIndex = history.length - 1;
+     tabs[activeTab].url = url;
+    tabs[activeTab].history.push(url);
+    tabs[activeTab].currentIndex = tabs[activeTab].history.length - 1;
      render(url);
 });
 
 backButton.addEventListener('click', function(){
     console.log('clicked');
-    if(currentIndex > 0){
-        currentIndex--;
-        document.getElementById('addressbar').value = history[currentIndex];
-        render(history[currentIndex]);
+    if(tabs[activeTab].currentIndex > 0){
+        tabs[activeTab].currentIndex--;
+        document.getElementById('addressbar').value = tabs[activeTab].history[tabs[activeTab].currentIndex];
+        render(tabs[activeTab].history[tabs[activeTab].currentIndex]);
     }
 });
 
 farwordButton.addEventListener('click', function(){
     console.log('clicked');
-    if(currentIndex < history.length-1){
-        currentIndex++;
-        document.getElementById('addressbar').value = history[currentIndex];
-        render(history[currentIndex]);
+    if(tabs[activeTab].currentIndex< tabs[activeTab].history.length-1){
+        tabs[activeTab].currentIndex++;
+        document.getElementById('addressbar').value = tabs[activeTab].history[tabs[activeTab].currentIndex];
+        render(tabs[activeTab].history[tabs[activeTab].currentIndex]);
     }
 });
 
