@@ -18,7 +18,7 @@ let rootNode = {type: 'document',children: []};
    let currentParent = stack[stack.length - 1];
          currentParent.children.push(newNode);
       
-i
+
         if (!selfClosing.includes(newNode.name)) {
     stack.push(newNode);
   }
