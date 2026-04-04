@@ -30,7 +30,9 @@ async function fetch(url, viewportWidth, viewportHeight) {
 
   
  const tokens = tokenize(body);
+ console.log('first 5 tokens:', tokens.slice(0, 5));
   const rootNode = buildDOM(tokens);
+  
 
   const allNodes = querySelectorAll(rootNode, '*');
   for (let node of allNodes) {
@@ -62,8 +64,8 @@ async function fetch(url, viewportWidth, viewportHeight) {
     styleMatcher(rootNode, rules);
   }
 
-  
   calculateLayout(rootNode, viewportWidth, 0, viewportWidth, viewportHeight);
+  console.log('body layout:', querySelector(rootNode, 'body').layout);
 
   
   let scriptNode = querySelector(rootNode, 'script');

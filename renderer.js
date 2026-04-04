@@ -140,7 +140,7 @@ function wrapText(ctx, text, maxWidth) {
 
 
 function renderNode(node, ctx, parentNode) {
-    
+    if (node.name === 'style' || node.name === 'script' || node.name === 'head' || node.name === 'title') return;
     if (node.type === 'text') {
         if (parentNode && (parentNode.name === 'style' || 
                    parentNode.name === 'head' || 

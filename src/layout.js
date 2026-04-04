@@ -26,6 +26,7 @@ structure. It takes three parameters: `node` representing the current node being
 position in the layout. */
 function calculateLayout(node, parentWidth, currentY, viewportWidth, viewportHeight, parentX = 0)  {
   if (node.type === 'text') return;
+  
 
   let layout = {x:parentX,y:currentY,width:parentWidth,height:0};
 
@@ -54,6 +55,7 @@ if (node.styles && node.styles.margin) {
   
 
  for (let Node of node.children) {
+  if (Node.name === 'head' || Node.name === 'script' || Node.name === 'style') continue;
   if (Node.type === 'text') {
     childY += 20; // default line height
   } else {

@@ -13,11 +13,19 @@ function tokenize(html) {
   let tokens = [];
 
   let inTag = false ;
+  let inStyle = false;
   let characters = "";
 
   for(let i = 0 ; i<html.length ; i++){
      let char = html.charAt(i);
+     
      if(char == '<'){
+      
+      if(inStyle){
+    characters += char;
+    continue;
+}
+
         inTag = true;
         if(characters != ""){
            tokens.push({ type: 'text', value: characters });
@@ -25,6 +33,17 @@ function tokenize(html) {
         }
      }
      else if(char == '>'){
+      
+     if(inStyle && !characters.endsWith('/style')){
+    characters += char;
+    continue;
+}
+
+if(inStyle && characters.endsWith('/style')){
+    inStyle = false;
+    characters = '/style';
+}
+
    inTag = false;
 
    if(characters.toLowerCase().startsWith('!doctype')){
@@ -33,10 +52,18 @@ function tokenize(html) {
    }
 
    if(characters[0] == '/'){
-     tokens.push({ type: 'close', name: characters.slice(1) });
+    if(characters.slice(1) === 'style'){
+    inStyle = false;
+}
+    
+tokens.push({ type: 'close', name: characters.slice(1) });
    } else {
     let parts = characters.split(' ');
     let tagName = parts[0];
+
+   if(tagName === 'style'){
+    inStyle = true;
+}
     let attributeParts = parts.slice(1);
     let attributes = {};
     for (let attr of attributeParts) {

@@ -17,6 +17,8 @@ let rootNode = {type: 'document',children: []};
        if (stack.length === 0) continue;
    let currentParent = stack[stack.length - 1];
          currentParent.children.push(newNode);
+      
+i
         if (!selfClosing.includes(newNode.name)) {
     stack.push(newNode);
   }
@@ -29,7 +31,8 @@ let currentParent = stack[stack.length - 1];
 
 }
 else if (token.type === 'close') {
-    if (stack.length > 1) stack.pop(); // never pop the root
+   
+    if (stack.length > 1) stack.pop();
 }
  }
   return  rootNode;
