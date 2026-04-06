@@ -14,6 +14,7 @@ function tokenize(html) {
 
   let inTag = false ;
   let inStyle = false;
+  let inComment = false;
   let characters = "";
 
   for(let i = 0 ; i<html.length ; i++){
@@ -22,6 +23,11 @@ function tokenize(html) {
      if(char == '<'){
       
       if(inStyle){
+    characters += char;
+    continue;
+}
+
+if(inComment){
     characters += char;
     continue;
 }
@@ -50,6 +56,21 @@ if(inStyle && characters.endsWith('/style')){
      characters = '';
      continue;
    }
+
+   if(inComment && characters.endsWith('--')){
+    inStyle = false;
+    inComment = false
+    characters = '';
+    continue;
+}
+
+   if(characters.startsWith('!--')){  
+    inComment = true;
+    characters = '';
+    continue;
+}
+
+
 
    if(characters[0] == '/'){
     if(characters.slice(1) === 'style'){
