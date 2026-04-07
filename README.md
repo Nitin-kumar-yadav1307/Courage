@@ -341,3 +341,4 @@ Day 40 — Tab switching. Each tab owns its url, history, currentIndex.
 Week 8: Bug fixes and polish.
 Fix text line overlap. Respect font sizes. Render anchor tags.
 Make more websites load correctly.
+on way of rendering wikipedia
