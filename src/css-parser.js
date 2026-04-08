@@ -20,7 +20,7 @@ function parseCSS(tokens) {
             // nothing to do here
 
         } else if (token.type === 'property') {
-            // property name arrived e.g. "color"
+            // property  name arrived e.g. "color"
             // store it temporarily — value comes next
             currentProperty = token.value;
 
