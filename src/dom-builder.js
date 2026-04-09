@@ -13,7 +13,11 @@ let rootNode = {type: 'document',children: []};
 
  for(let token of tokens){
     if (token.type === 'open') {
-       let newNode = { type : 'element', name: token.name,children: []}
+     if (token.name === 'link') {
+    console.log('link token attributes:', token.attributes);
+}
+       let newNode = { type : 'element', name: token.name,children: [],attributes : {}}
+       newNode.attributes = token.attributes
        if (stack.length === 0) continue;
    let currentParent = stack[stack.length - 1];
          currentParent.children.push(newNode);

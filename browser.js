@@ -31,8 +31,15 @@ async function fetch(url, viewportWidth, viewportHeight) {
   
  const tokens = tokenize(body);
  console.log('first 5 tokens:', tokens.slice(0, 5));
+ console.log('link token:', tokens.find(t => t.name === 'link'));
   const rootNode = buildDOM(tokens);
   
+  allLinkNode = querySelectorAll(rootNode,'link');
+ for (let link of allLinkNode) {
+    if (link.attributes.rel === 'stylesheet') {
+        console.log('stylesheet href:', link.attributes.href);
+    }
+}
 
   const allNodes = querySelectorAll(rootNode, '*');
   for (let node of allNodes) {
@@ -63,6 +70,8 @@ async function fetch(url, viewportWidth, viewportHeight) {
     const rules = parseCSS(cssTokens);
     styleMatcher(rootNode, rules);
   }
+
+  
 
   calculateLayout(rootNode, viewportWidth, 0, viewportWidth, viewportHeight);
   console.log('body layout:', querySelector(rootNode, 'body').layout);
