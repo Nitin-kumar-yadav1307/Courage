@@ -6,7 +6,7 @@ function styleMatcher(node, rules) {
   for (let rule of rules) {
      if (!rule) continue;
     if (rule.selector === node.name) {
-
+     
       // create styles object if it doesn't exist
       if (!node.styles) {
         node.styles = {};
@@ -17,6 +17,20 @@ function styleMatcher(node, rules) {
         node.styles[key] = rule.declaration[key];
       }
     }
+    else if (rule.selector.startsWith('.')) {
+       if (node.attributes && node.attributes.class) {
+      if(node.attributes.class.split(' ').includes(rule.selector.slice(1))){
+        if (!node.styles) {
+        node.styles = {};
+      }
+
+      // copy all declarations into node.styles
+      for (let key in rule.declaration) {
+        node.styles[key] = rule.declaration[key];
+      }
+          }  
+    }
+}
   }
 
   // Step 2: if no children → stop
