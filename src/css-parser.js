@@ -29,6 +29,7 @@ function parseCSS(tokens) {
             // now we have both key and value — add to declaration
             // currentProperty = "color", token.value = "red"
             // → declaration["color"] = "red"
+            if (!currentRule) continue;
             currentRule.declaration[currentProperty] = token.value;
 
         } else if (token.type === 'closeBlock') {

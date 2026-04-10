@@ -2,7 +2,9 @@ function styleMatcher(node, rules) {
 
   // Step 1: loop through every rule
   // if rule.selector matches node.name → attach rule.declaration to node.styles
+ 
   for (let rule of rules) {
+     if (!rule) continue;
     if (rule.selector === node.name) {
 
       // create styles object if it doesn't exist

@@ -19,6 +19,7 @@ async function fetch(url, viewportWidth, viewportHeight) {
   console.log(rawResponse.slice(0, 500));
 
   const {statusCode, statusText, headersObject, body} = parseResponse(rawResponse);
+  console.log(body.slice(0, 3000));
 
   
 
@@ -36,8 +37,13 @@ async function fetch(url, viewportWidth, viewportHeight) {
   
   allLinkNode = querySelectorAll(rootNode,'link');
  for (let link of allLinkNode) {
+  if (!link.attributes.href) continue;
     if (link.attributes.rel === 'stylesheet') {
-        console.log('stylesheet href:', link.attributes.href);
+       let styleCSS = await fetchCSS(link.attributes.href);
+       const cssTokens = tokenizeCSS(styleCSS);
+       const rules = parseCSS(cssTokens);                       //https://github.com
+       styleMatcher(rootNode, rules);
+
     }
 }
 
@@ -89,6 +95,14 @@ async function fetch(url, viewportWidth, viewportHeight) {
   }
 
   return rootNode;
+}
+
+
+async function fetchCSS(url){
+ const {host, port, protocol, path} = parseURL(url);
+   const rawResponse = await sendRequest(host, port, path, protocol);
+   const {statusCode, statusText, headersObject, body} = parseResponse(rawResponse);
+   return body;
 }
 
 module.exports = { fetch };
