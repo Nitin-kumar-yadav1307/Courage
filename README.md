@@ -5,8 +5,6 @@ No libraries. No shortcuts. Every line written by hand.
 
 ## 🎥 Demo
 
-## 🎥 Demo
-
 <p align="center">
   <img src="assets/demo.gif" width="900"/>
 </p>
