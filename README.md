@@ -3,6 +3,14 @@
 A web browser built from scratch in Node.js.
 No libraries. No shortcuts. Every line written by hand.
 
+## 🎥 Demo
+
+## 🎥 Demo
+
+<p align="center">
+  <img src="./assets/demo.gif" width="900"/>
+</p>
+
 ## Why
 Because I want to understand what most people never will.
 Because I want something I can call mine.
