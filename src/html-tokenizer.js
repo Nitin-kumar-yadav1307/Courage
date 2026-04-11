@@ -47,6 +47,7 @@ if(inComment){
 
 if(inStyle && characters.endsWith('/style')){
     inStyle = false;
+    tokens.push({ type: 'text', value: characters.slice(0, characters.length - 6) });
     characters = '/style';
 }
 

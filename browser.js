@@ -41,7 +41,7 @@ async function fetch(url, viewportWidth, viewportHeight) {
     if (link.attributes.rel === 'stylesheet') {
        let styleCSS = await fetchCSS(link.attributes.href);
        const cssTokens = tokenizeCSS(styleCSS);
-       const rules = parseCSS(cssTokens);                       //https://github.com   http://example.com
+       const rules = parseCSS(cssTokens);      //https://github.com   http://example.com
        styleMatcher(rootNode, rules);
 
     }
@@ -70,10 +70,12 @@ async function fetch(url, viewportWidth, viewportHeight) {
 
   
   const styleNode = querySelector(rootNode, 'style');
+  console.log('styleNode:', styleNode);
   if (styleNode) {
     const css = innerHTML(styleNode);
     const cssTokens = tokenizeCSS(css);
     const rules = parseCSS(cssTokens);
+     console.log('rules:', rules); 
     styleMatcher(rootNode, rules);
   }
 

@@ -6,7 +6,7 @@ function styleMatcher(node, rules) {
   for (let rule of rules) {
      if (!rule) continue;
     if (rule.selector === node.name) {
-     
+     console.log('matched:', rule.selector);
       // create styles object if it doesn't exist
       if (!node.styles) {
         node.styles = {};
@@ -30,6 +30,19 @@ function styleMatcher(node, rules) {
       }
           }  
     }
+}
+
+else if (rule.selector.startsWith('#')) {
+  if (node.attributes && node.attributes.id) {
+    if (node.attributes.id === rule.selector.slice(1)) {
+      if (!node.styles) {
+        node.styles = {};
+      }
+      for (let key in rule.declaration) {
+        node.styles[key] = rule.declaration[key];
+      }
+    }
+  }
 }
   }
 

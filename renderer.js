@@ -157,7 +157,10 @@ function renderNode(node, ctx, parentNode) {
     }
 
     if (!node.layout) return;
-
+    
+if (node.name === 'body') {
+    console.log('body styles:', node.styles);
+}
     if (node.styles && node.styles.background) {
       console.log('color:', parentNode && parentNode.styles && parentNode.styles.color);
         ctx.fillStyle = node.styles.background;
