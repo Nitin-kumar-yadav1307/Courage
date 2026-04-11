@@ -147,7 +147,7 @@ function renderNode(node, ctx, parentNode) {
                    parentNode.name === 'title' ||
                    parentNode.name === 'script')) return;
                    
-        ctx.fillStyle = '#333333';
+        ctx.fillStyle =ctx.fillStyle = (parentNode && parentNode.styles && parentNode.styles.color) || '#333333';
         ctx.font = '16px sans-serif';
         const lines = wrapText(ctx, node.value, parentNode.layout.width );
         lines.forEach((line, index) => {
@@ -159,6 +159,7 @@ function renderNode(node, ctx, parentNode) {
     if (!node.layout) return;
 
     if (node.styles && node.styles.background) {
+      console.log('color:', parentNode && parentNode.styles && parentNode.styles.color);
         ctx.fillStyle = node.styles.background;
         ctx.fillRect(node.layout.x, node.layout.y, node.layout.width, node.layout.height);
     }

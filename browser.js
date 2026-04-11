@@ -41,7 +41,7 @@ async function fetch(url, viewportWidth, viewportHeight) {
     if (link.attributes.rel === 'stylesheet') {
        let styleCSS = await fetchCSS(link.attributes.href);
        const cssTokens = tokenizeCSS(styleCSS);
-       const rules = parseCSS(cssTokens);                       //https://github.com
+       const rules = parseCSS(cssTokens);                       //https://github.com   http://example.com
        styleMatcher(rootNode, rules);
 
     }
