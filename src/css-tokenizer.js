@@ -23,9 +23,15 @@ function tokenizeCSS(css) {
 
         } else if (char === '}') {
             // closing brace means the rule block is done
-            tokens.push({ type: 'closeBlock' });
+           if(characters){
+           tokens.push({ type: 'value', value: characters.trim() });
+           
+           }
+           
+             tokens.push({ type: 'closeBlock' });
             characters = ""; // reset
-
+           
+            
         } else if (char === ':') {
             // colon separates property from value
             // everything collected so far is the property name e.g. "color"
