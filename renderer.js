@@ -1,4 +1,5 @@
 const { fetch } = require('./browser.js');
+const { querySelectorAll } = require('./src/querySelectorAll.js');
 let tabs = [];
 let activeTab = 0;
 let history = [];
@@ -11,6 +12,7 @@ const toolbar = document.getElementById('toolbar');
 const backButton = document.querySelector('#backword');
 const farwordButton = document.querySelector('#farword');
 const reloadButton = document.querySelector('#reload');
+let rootNode = null ;
 
 
 
@@ -68,6 +70,28 @@ function createTab(){
     activeTab = tabs.length - 1;
     tabElement.classList.add('active');
 }
+
+//canvas eventListner
+canvas.addEventListener('click', function(event) {
+   
+    console.log('toolbar height:', toolbar.offsetHeight);
+   const rect = canvas.getBoundingClientRect();
+console.log('canvas rect:', rect.top, rect.left);
+    let anchorNodes = querySelectorAll(rootNode , 'a');
+    console.log('clicked at:', event.clientX, event.clientY);
+console.log('anchors found:', anchorNodes.length);
+    for(let anchorNode of anchorNodes){
+      console.log('anchor href:', anchorNode.attributes.href);
+console.log('anchor layout:', anchorNode.layout);
+console.log('adjusted y:', event.clientY - rect.top, 'layout y:', anchorNode.layout.y);
+      if (event.clientX >= anchorNode.layout.x && 
+    event.clientX <= anchorNode.layout.x + anchorNode.layout.width &&
+   event.clientY - rect.top >= anchorNode.layout.y && 
+event.clientY - rect.top <= anchorNode.layout.y + anchorNode.layout.height) {
+    render(anchorNode.attributes.href);
+}
+    }
+});
 
 
 // add tab
@@ -176,7 +200,7 @@ if (node.name === 'body') {
 
 
 async function render(url) {
-    const rootNode = await fetch(url, window.innerWidth, window.innerHeight);
+     rootNode = await fetch(url, window.innerWidth, window.innerHeight);
      ctx.clearRect(0, 0, canvas.width, canvas.height);
     renderNode(rootNode, ctx); 
 }
