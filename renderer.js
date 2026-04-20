@@ -76,18 +76,22 @@ canvas.addEventListener('click', function(event) {
    
     console.log('toolbar height:', toolbar.offsetHeight);
    const rect = canvas.getBoundingClientRect();
+const x = event.clientX - rect.left;
+const y = event.clientY - rect.top;
+if (!rootNode) return;
 console.log('canvas rect:', rect.top, rect.left);
     let anchorNodes = querySelectorAll(rootNode , 'a');
-    console.log('clicked at:', event.clientX, event.clientY);
+    
 console.log('anchors found:', anchorNodes.length);
     for(let anchorNode of anchorNodes){
+        if (!anchorNode.layout) continue;
       console.log('anchor href:', anchorNode.attributes.href);
       console.log('anchor layout:', anchorNode.layout);
       console.log('adjusted y:', event.clientY - rect.top, 'layout y:', anchorNode.layout.y);
-      if (event.clientX >= anchorNode.layout.x && 
-    event.clientX <= anchorNode.layout.x + anchorNode.layout.width &&
-    event.clientY - rect.top >= anchorNode.layout.y-16 && 
-    event.clientY - rect.top <= anchorNode.layout.y + anchorNode.layout.height-16) {
+      if (x >= anchorNode.layout.x && 
+    x <= anchorNode.layout.x + anchorNode.layout.width &&
+   y >= anchorNode.layout.y &&
+   y <= anchorNode.layout.y + anchorNode.layout.height) {
     render(anchorNode.attributes.href);
 }
     }
@@ -97,17 +101,34 @@ console.log('anchors found:', anchorNodes.length);
 // mouse pointer
 canvas.addEventListener('mousemove', function(event) {
     canvas.style.cursor = 'default';
-    const rect = canvas.getBoundingClientRect();
+     const rect = canvas.getBoundingClientRect();
+const x = event.clientX - rect.left;
+const y = event.clientY - rect.top;
+if (!rootNode) return;
     let anchorNodes = querySelectorAll(rootNode , 'a');
     for(let anchorNode of anchorNodes){
-if (event.clientX >= anchorNode.layout.x && 
-    event.clientX <= anchorNode.layout.x + anchorNode.layout.width &&
-    event.clientY - rect.top >= anchorNode.layout.y-16 && 
-    event.clientY - rect.top <= anchorNode.layout.y + anchorNode.layout.height-16) {
+        if (!anchorNode.layout) continue;
+if (x >= anchorNode.layout.x && 
+    x <= anchorNode.layout.x + anchorNode.layout.width &&
+   y >= anchorNode.layout.y &&
+   y <= anchorNode.layout.y + anchorNode.layout.height) {
     canvas.style.cursor = 'pointer';
+    console.log('adjusted y:', event.clientY - rect.top, 'layout y:', anchorNode.layout.y);
 }
     }
 
+});
+
+
+window.addEventListener('resize', function () {
+  canvas.height = window.innerHeight - toolbar.offsetHeight;
+  canvas.width = window.innerWidth;
+
+  if (tabs[activeTab] && tabs[activeTab].url) {
+    render(tabs[activeTab].url);
+  } else {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
 });
 
 
@@ -217,7 +238,7 @@ if (node.name === 'body') {
 
 
 async function render(url) {
-     rootNode = await fetch(url, window.innerWidth, window.innerHeight);
+     rootNode = await fetch(url, canvas.width, canvas.height);
      ctx.clearRect(0, 0, canvas.width, canvas.height);
     renderNode(rootNode, ctx); 
 }
