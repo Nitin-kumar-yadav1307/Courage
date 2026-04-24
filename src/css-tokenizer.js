@@ -6,7 +6,7 @@ function tokenizeCSS(css) {
 
     let tokens = [];       // all tokens collected here
     let characters = "";   // current token being built character by character
-
+    let inBlock = false;
     // the four characters that signal something is starting or ending in CSS
     const landmark = ['{', '}', ':', ';'];
 
@@ -17,12 +17,14 @@ function tokenizeCSS(css) {
             // opening brace means everything collected so far is the selector
             // e.g. "h1 " → selector "h1"
             // trim() removes extra whitespace like "h1 " → "h1"
+            inBlock=true;
             tokens.push({ type: 'selector', value: characters.trim() });
             tokens.push({ type: 'openBlock' }); // marks start of rule block
             characters = ""; // reset — start collecting next token
 
         } else if (char === '}') {
             // closing brace means the rule block is done
+            inBlock=false;
            if(characters){
            tokens.push({ type: 'value', value: characters.trim() });
            
@@ -32,13 +34,15 @@ function tokenizeCSS(css) {
             characters = ""; // reset
            
             
-        } else if (char === ':') {
-            // colon separates property from value
-            // everything collected so far is the property name e.g. "color"
-            tokens.push({ type: 'property', value: characters.trim() });
-            characters = ""; // reset — next we collect the value
-
-        } else if (char === ';') {
+    } else if (char === ':') {
+       if(inBlock){
+        tokens.push({ type: 'property', value: characters.trim() });
+        characters = "";
+       } 
+       else {
+        characters += char;
+       }
+    } else if (char === ';') {
             // semicolon ends a declaration
             // everything collected so far is the value e.g. "red" or "16px"
             tokens.push({ type: 'value', value: characters.trim() });

@@ -79,15 +79,15 @@ canvas.addEventListener('click', function(event) {
 const x = event.clientX - rect.left;
 const y = event.clientY - rect.top;
 if (!rootNode) return;
-console.log('canvas rect:', rect.top, rect.left);
+
     let anchorNodes = querySelectorAll(rootNode , 'a');
     
 console.log('anchors found:', anchorNodes.length);
     for(let anchorNode of anchorNodes){
         if (!anchorNode.layout) continue;
-      console.log('anchor href:', anchorNode.attributes.href);
-      console.log('anchor layout:', anchorNode.layout);
-      console.log('adjusted y:', event.clientY - rect.top, 'layout y:', anchorNode.layout.y);
+     // console.log('anchor href:', anchorNode.attributes.href);
+     // console.log('anchor layout:', anchorNode.layout);
+     // console.log('adjusted y:', event.clientY - rect.top, 'layout y:', anchorNode.layout.y);
       if (x >= anchorNode.layout.x && 
     x <= anchorNode.layout.x + anchorNode.layout.width &&
    y >= anchorNode.layout.y &&
@@ -113,7 +113,7 @@ if (x >= anchorNode.layout.x &&
    y >= anchorNode.layout.y &&
    y <= anchorNode.layout.y + anchorNode.layout.height) {
     canvas.style.cursor = 'pointer';
-    console.log('adjusted y:', event.clientY - rect.top, 'layout y:', anchorNode.layout.y);
+   // console.log('adjusted y:', event.clientY - rect.top, 'layout y:', anchorNode.layout.y);
 }
     }
 
