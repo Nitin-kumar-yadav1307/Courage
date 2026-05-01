@@ -6,13 +6,17 @@ function styleMatcher(node, rules) {
   for (let rule of rules) {
      if (!rule) continue;
     if (rule.selector === node.name) {
-    // existing code
+      if (!node.styles) node.styles = {};
+    for (let key in rule.declaration) {
+        node.styles[key] = rule.declaration[key];
+    }
 } else if (rule.selector.includes(':')) {
     let e1 = rule.selector.split(',');
     let e2 = e1[0].split(':');
     let e3 = e2[0];
     if (e3 === node.name) {
-        if (!node.styles) node.styles = {};
+        if (!node.styles) node.styles = {};                  
+        console.log('matching rule:', rule.selector, 'to node:', node.name, 'declaration:', rule.declaration);
         for (let key in rule.declaration) {
             node.styles[key] = rule.declaration[key];
         }

@@ -22,19 +22,15 @@ function tokenizeCSS(css) {
             tokens.push({ type: 'openBlock' }); // marks start of rule block
             characters = ""; // reset — start collecting next token
 
-        } else if (char === '}') {
-            // closing brace means the rule block is done
-            inBlock=false;
-           if(characters){
-           tokens.push({ type: 'value', value: characters.trim() });
-           
-           }
-           
-             tokens.push({ type: 'closeBlock' });
-            characters = ""; // reset
-           
-            
-    } else if (char === ':') {
+        }  else if (char === '}') {
+    inBlock = false;
+    if (characters.trim()) {
+        tokens.push({ type: 'value', value: characters.trim() });
+    }
+    tokens.push({ type: 'closeBlock' });
+    characters = "";
+    
+   }else if (char === ':') {
        if(inBlock){
         tokens.push({ type: 'property', value: characters.trim() });
         characters = "";

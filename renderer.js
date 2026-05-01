@@ -210,8 +210,12 @@ function renderNode(node, ctx, parentNode) {
                    parentNode.name === 'script')) return;
                    
         ctx.fillStyle =ctx.fillStyle = (parentNode && parentNode.styles && parentNode.styles.color) || '#333333';
-        console.log('font-size:',parentNode?.styles?.['font-size']);
-        ctx.font = (parentNode?.styles?.['font-size'] + ' sans-serif') || ('16px sans-serif');
+       
+       const size = parentNode?.styles?.['font-size'] || '16px';
+const weight = parentNode?.styles?.['font-weight'] || 'normal';
+const style = parentNode?.styles?.['font-style'] || 'normal';
+console.log('weight:', weight, 'style:', style);
+ctx.font = `${style} ${weight} ${size} sans-serif`;
         const lines = wrapText(ctx, node.value, parentNode.layout.width );
         lines.forEach((line, index) => {
         ctx.fillText(line, parentNode.layout.x, parentNode.layout.y + 16 + (index * 20));

@@ -14,6 +14,7 @@ function parseCSS(tokens) {
             // declaration starts empty — filled as property/value pairs arrive
             let newRule = { selector: token.value, declaration: {} };
             currentRule = newRule;
+           
 
         } else if (token.type === 'openBlock') {
             // { encountered — rule already started at selector
@@ -35,6 +36,7 @@ function parseCSS(tokens) {
         } else if (token.type === 'closeBlock') {
             // } encountered — rule is complete
             // push to rules array and reset for next rule
+           
             rules.push(currentRule);
             currentRule = null;
         }
