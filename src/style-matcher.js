@@ -1,9 +1,15 @@
+const defaultRules = [
+    { selector: 'h1', declaration: { 'font-size': '32px', 'font-weight': 'bold' } },
+    { selector: 'h2', declaration: { 'font-size': '24px', 'font-weight': 'bold' } },
+    { selector: 'h3', declaration: { 'font-size': '20px', 'font-weight': 'bold'} },
+];
+
 function styleMatcher(node, rules) {
 
   // Step 1: loop through every rule
   // if rule.selector matches node.name → attach rule.declaration to node.styles
- 
-  for (let rule of rules) {
+ const allRules = [...defaultRules, ...rules];
+  for (let rule of allRules) {
      if (!rule) continue;
     if (rule.selector === node.name) {
       if (!node.styles) node.styles = {};

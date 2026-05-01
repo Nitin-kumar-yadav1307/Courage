@@ -211,11 +211,16 @@ function renderNode(node, ctx, parentNode) {
                    
         ctx.fillStyle =ctx.fillStyle = (parentNode && parentNode.styles && parentNode.styles.color) || '#333333';
        
-       const size = parentNode?.styles?.['font-size'] || '16px';
-const weight = parentNode?.styles?.['font-weight'] || 'normal';
-const style = parentNode?.styles?.['font-style'] || 'normal';
-console.log('weight:', weight, 'style:', style);
-ctx.font = `${style} ${weight} ${size} sans-serif`;
+      const headingSizes = { h1: '32px', h2: '24px', h3: '20px', h4: '18px' };
+const rawSize = node?.styles?.['font-size'] || parentNode?.styles?.['font-size'] || '16px';
+const size = rawSize.endsWith('em') 
+    ? (headingSizes[parentNode?.name] || '16px') 
+    : rawSize;
+       const weight =  node?.styles?.['font-weight'] || parentNode?.styles?.['font-weight'] || 'normal';
+       const style =  node?.styles?.['font-style'] || parentNode?.styles?.['font-style'] || 'normal';
+       console.log('weight:', weight, 'style:', style);
+       console.log('parentNode name:', parentNode?.name, 'parentNode styles:', parentNode?.styles);
+      ctx.font = `${style} ${weight} ${size} sans-serif`;
         const lines = wrapText(ctx, node.value, parentNode.layout.width );
         lines.forEach((line, index) => {
         ctx.fillText(line, parentNode.layout.x, parentNode.layout.y + 16 + (index * 20));
