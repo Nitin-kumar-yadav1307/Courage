@@ -159,7 +159,7 @@ backButton.addEventListener('click', function(){
 
 // farword button
 farwordButton.addEventListener('click', function(){
-    console.log('clicked');
+   // console.log('clicked');
     if(tabs[activeTab].currentIndex< tabs[activeTab].history.length-1){
         tabs[activeTab].currentIndex++;
         document.getElementById('addressbar').value = tabs[activeTab].history[tabs[activeTab].currentIndex];
@@ -209,17 +209,20 @@ function renderNode(node, ctx, parentNode) {
                    parentNode.name === 'title' ||
                    parentNode.name === 'script')) return;
                    
-        ctx.fillStyle =ctx.fillStyle = (parentNode && parentNode.styles && parentNode.styles.color) || '#333333';
-       
-      const headingSizes = { h1: '32px', h2: '24px', h3: '20px', h4: '18px' };
-const rawSize = node?.styles?.['font-size'] || parentNode?.styles?.['font-size'] || '16px';
-const size = rawSize.endsWith('em') 
-    ? (headingSizes[parentNode?.name] || '16px') 
+       const parentStyles = parentNode?.computedStyles || parentNode?.styles || {};
+const nodeStyles = node?.computedStyles || node?.styles || {};
+
+ctx.fillStyle = parentStyles.color || '#333333';
+
+const headingSizes = { h1: '32px', h2: '24px', h3: '20px', h4: '18px' };
+const rawSize = nodeStyles['font-size'] || parentStyles['font-size'] || '16px';
+const size = rawSize.endsWith('em')
+    ? (headingSizes[parentNode?.name] || '16px')
     : rawSize;
-       const weight =  node?.styles?.['font-weight'] || parentNode?.styles?.['font-weight'] || 'normal';
-       const style =  node?.styles?.['font-style'] || parentNode?.styles?.['font-style'] || 'normal';
-       console.log('weight:', weight, 'style:', style);
-       console.log('parentNode name:', parentNode?.name, 'parentNode styles:', parentNode?.styles);
+    
+const weight = nodeStyles['font-weight'] || parentStyles['font-weight'] || 'normal';
+const style = nodeStyles['font-style'] || parentStyles['font-style'] || 'normal';
+
       ctx.font = `${style} ${weight} ${size} sans-serif`;
         const lines = wrapText(ctx, node.value, parentNode.layout.width );
         lines.forEach((line, index) => {
@@ -231,17 +234,17 @@ const size = rawSize.endsWith('em')
     if (!node.layout) return;
     
 if (node.name === 'body') {
-    console.log('body styles:', node.styles);
+    // console.log('body styles:', node.styles);
 }
-    if (node.styles && node.styles.background) {
-      console.log('color:', parentNode && parentNode.styles && parentNode.styles.color);
-        ctx.fillStyle = node.styles.background;
-        ctx.fillRect(node.layout.x, node.layout.y, node.layout.width, node.layout.height);
-    }
+const styles = node.computedStyles || node.styles || {};
+if (styles.background) {
+    ctx.fillStyle = styles.background;
+    ctx.fillRect(node.layout.x, node.layout.y, node.layout.width, node.layout.height);
+}
 
-    for (let child of node.children) {
-        renderNode(child, ctx, node);
-    }
+for (let child of node.children) {
+    renderNode(child, ctx, node);
+}
 }
 
 

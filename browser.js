@@ -11,28 +11,29 @@ const { parseCSS } = require('./src/css-parser.js');
 const { styleMatcher} = require('./src/style-matcher.js');
 const {calculateLayout} = require("./src/layout.js");
 const { querySelectorAll } = require('./src/querySelectorAll.js');
+const { getComputedStyle } = require('./src/computed-styles.js')
 
 async function fetch(url, viewportWidth, viewportHeight) {
   const {host, port, protocol, path} = parseURL(url);
 
   const rawResponse = await sendRequest(host, port, path, protocol);
-  console.log(rawResponse.slice(0, 500));
+  //console.log(rawResponse.slice(0, 500));
 
   const {statusCode, statusText, headersObject, body} = parseResponse(rawResponse);
-  console.log(body.slice(0, 3000));
+ // console.log(body.slice(0, 3000));
 
   
 
   if (statusCode === 301 || statusCode === 302) {
     const newUrl = headersObject['location'];
-    console.log('Redirecting to:', newUrl);
+  //  console.log('Redirecting to:', newUrl);
     return fetch(newUrl, viewportWidth, viewportHeight);
   }
 
   
  const tokens = tokenize(body);
- console.log('first 5 tokens:', tokens.slice(0, 5));
- console.log('link token:', tokens.find(t => t.name === 'link'));
+// console.log('first 5 tokens:', tokens.slice(0, 5));
+ //console.log('link token:', tokens.find(t => t.name === 'link'));
   const rootNode = buildDOM(tokens);
   
   allLinkNode = querySelectorAll(rootNode,'link');
@@ -41,8 +42,9 @@ async function fetch(url, viewportWidth, viewportHeight) {
     if (link.attributes.rel === 'stylesheet') {
        let styleCSS = await fetchCSS(link.attributes.href);
        const cssTokens = tokenizeCSS(styleCSS);
-       const rules = parseCSS(cssTokens);      //https://github.com   http://example.com
-       console.log('rules:', JSON.stringify(rules));
+       const rules = parseCSS(cssTokens); 
+         console.log('selectors:', rules.map(r => r.selector).join(', '));            // https://github.com/    http://example.com
+       //console.log('rules:', JSON.stringify(rules));
        styleMatcher(rootNode, rules);
 
     }
@@ -71,20 +73,28 @@ async function fetch(url, viewportWidth, viewportHeight) {
 
   
   const styleNode = querySelector(rootNode, 'style');
-  console.log('styleNode:', styleNode);
+ // console.log('styleNode:', styleNode);
   if (styleNode) {
     const css = innerHTML(styleNode);
     const cssTokens = tokenizeCSS(css);
-    console.log('cssTokens:', JSON.stringify(cssTokens));
+   // console.log('cssTokens:', JSON.stringify(cssTokens));
     const rules = parseCSS(cssTokens);
-   console.log('rules:', JSON.stringify(rules));
+    console.log('selectors:', rules.map(r => r.selector).join(', '));
+   //console.log('rules:', JSON.stringify(rules));
     styleMatcher(rootNode, rules);
+  
   }
 
+  const allStyledNodes = querySelectorAll(rootNode, '*');
+for (let node of allStyledNodes) {
+    node.computedStyles = getComputedStyle(node);
+}
+const htmlNode = querySelectorAll(rootNode, 'html')[0];
+console.log('html styles:', htmlNode?.styles);
   
 
   calculateLayout(rootNode, viewportWidth, 0, viewportWidth, viewportHeight);
-  console.log('body layout:', querySelector(rootNode, 'body').layout);
+//  console.log('body layout:', querySelector(rootNode, 'body').layout);
 
   
   let scriptNode = querySelector(rootNode, 'script');
@@ -93,7 +103,7 @@ async function fetch(url, viewportWidth, viewportHeight) {
    try {
     eval(js);
 } catch(e) {
-    console.log('JS eval error:', e.message);
+   // console.log('JS eval error:', e.message);
 }
     calculateLayout(rootNode, viewportWidth, 0, viewportWidth, viewportHeight);
   }
