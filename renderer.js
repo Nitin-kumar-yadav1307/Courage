@@ -227,17 +227,26 @@ const style = nodeStyles['font-style'] || parentStyles['font-style'] || 'normal'
         const lines = wrapText(ctx, node.value, parentNode.layout.width );
         lines.forEach((line, index) => {
         ctx.fillText(line, parentNode.layout.x, parentNode.layout.y + 16 + (index * 20));
+        const x = parentNode.layout.x;
+    const y = parentNode.layout.y + 16 + (index * 20);
+    ctx.fillText(line, x, y);
+    
+    if (parentNode.name === 'a') {
+        const metrics = ctx.measureText(line);
+        ctx.fillRect(x, y + 2, metrics.width, 1);
+    }
         });
         return;
     }
 
     if (!node.layout) return;
-    
+   const styles = node.computedStyles || node.styles || {}; 
 if (node.name === 'body') {
-    // console.log('body styles:', node.styles);
-}
-const styles = node.computedStyles || node.styles || {};
-if (styles.background) {
+    if (styles.background) {
+        ctx.fillStyle = styles.background;
+        ctx.fillRect(0, 0, canvas.width, canvas.height); // full viewport
+    }
+} else if (styles.background) {
     ctx.fillStyle = styles.background;
     ctx.fillRect(node.layout.x, node.layout.y, node.layout.width, node.layout.height);
 }

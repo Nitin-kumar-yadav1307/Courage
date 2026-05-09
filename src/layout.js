@@ -1,7 +1,5 @@
 
 
-
-
 function parseValue(value, viewportWidth, viewportHeight){
   if (value === '0') return 0;
   let ans = null ;
@@ -50,9 +48,16 @@ if (node.styles && node.styles.margin) {
     node.layout.width,
     parentWidth
 );
+
   node.layout.x = margin.left;
   node.layout.y = currentY + margin.top;
   childY = node.layout.y;
+}
+
+if (node.styles && node.styles['margin-top']) {
+    const mt = parseValue(node.styles['margin-top'], viewportWidth, viewportHeight);
+    node.layout.y += mt;
+    childY = node.layout.y;
 }
   
 
@@ -63,10 +68,15 @@ if (node.styles && node.styles.margin) {
 childY += numLines * 20;// default line height
   } else {
    calculateLayout(Node, node.layout.width, childY, viewportWidth, viewportHeight, node.layout.x);
+   
     if (Node.layout) {
       childY += Node.layout.height;
     }
   }
+}
+if (node.styles && node.styles['margin-bottom']) {
+    const mb = parseValue(node.styles['margin-bottom'], viewportWidth, viewportHeight);
+    childY += mb;
 }
   node.layout.height = childY - node.layout.y;
 

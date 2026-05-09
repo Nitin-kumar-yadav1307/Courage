@@ -1,7 +1,9 @@
 const defaultRules = [
-    { selector: 'h1', declaration: { 'font-size': '32px', 'font-weight': 'bold' } },
-    { selector: 'h2', declaration: { 'font-size': '24px', 'font-weight': 'bold' } },
-    { selector: 'h3', declaration: { 'font-size': '20px', 'font-weight': 'bold'} },
+    { selector: 'h1', declaration: { 'font-size': '32px', 'font-weight': 'bold', 'margin-top': '21px', 'margin-bottom': '21px' } },
+    { selector: 'h2', declaration: { 'font-size': '24px', 'font-weight': 'bold', 'margin-top': '19px', 'margin-bottom': '19px' } },
+    { selector: 'h3', declaration: { 'font-size': '20px', 'font-weight': 'bold', 'margin-top': '18px', 'margin-bottom': '18px' } },
+    { selector: 'p',  declaration: { 'margin-top': '16px', 'margin-bottom': '16px' } },
+    { selector: 'a', declaration: { 'text-decoration': 'underline' } },
 ];
 
 function styleMatcher(node, rules) {
