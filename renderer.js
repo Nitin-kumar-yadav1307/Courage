@@ -217,13 +217,15 @@ ctx.fillStyle = parentStyles.color || '#333333';
 const headingSizes = { h1: '32px', h2: '24px', h3: '20px', h4: '18px' };
 const rawSize = nodeStyles['font-size'] || parentStyles['font-size'] || '16px';
 const size = rawSize.endsWith('em')
-    ? (headingSizes[parentNode?.name] || '16px')
+    ? `${parseFloat(rawSize) * 16}px`
     : rawSize;
     
 const weight = nodeStyles['font-weight'] || parentStyles['font-weight'] || 'normal';
 const style = nodeStyles['font-style'] || parentStyles['font-style'] || 'normal';
 
-      ctx.font = `${style} ${weight} ${size} sans-serif`;
+       const rawFamily = nodeStyles['font-family'] || parentStyles['font-family'] || 'sans-serif';
+       const family = rawFamily.includes('system-ui') ? 'Segoe UI, sans-serif' : rawFamily;
+          ctx.font = `${style} ${weight} ${size} ${family}`;
         const lines = wrapText(ctx, node.value, parentNode.layout.width );
         lines.forEach((line, index) => {
         ctx.fillText(line, parentNode.layout.x, parentNode.layout.y + 16 + (index * 20));
