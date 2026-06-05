@@ -204,6 +204,7 @@ function wrapText(ctx, text, maxWidth) {
 function renderNode(node, ctx, parentNode) {
     if (node.name === 'style' || node.name === 'script' || node.name === 'head' || node.name === 'title') return;
     if (node.type === 'text') {
+     //   console.log('parentNode.name:', parentNode.name);
         if (parentNode && (parentNode.name === 'style' || 
                    parentNode.name === 'head' || 
                    parentNode.name === 'title' ||
@@ -228,16 +229,26 @@ const style = nodeStyles['font-style'] || parentStyles['font-style'] || 'normal'
           ctx.font = `${style} ${weight} ${size} ${family}`;
         const lines = wrapText(ctx, node.value, parentNode.layout.width );
         lines.forEach((line, index) => {
-        ctx.fillText(line, parentNode.layout.x, parentNode.layout.y + 16 + (index * 20));
-        const x = parentNode.layout.x;
+    const x = parentNode.layout.x;
     const y = parentNode.layout.y + 16 + (index * 20);
-    ctx.fillText(line, x, y);
-    
+
+    const isInList = parentNode.name === 'li' || 
+                     (parentNode.name === 'a' && parentNode.parentNode?.name === 'li');
+
+    if (isInList) {
+        ctx.fillText('•', x - 15, y);
+        ctx.fillText(line, x + 10, y);
+       // console.log('a layout.x:', parentNode.layout.x, 'parentNode.parentNode:', parentNode.parentNode?.name);
+        console.log('drawing bullet at:', x - 15, y, 'fillStyle:', ctx.fillStyle);
+    } else {
+        ctx.fillText(line, x, y);
+    }
+
     if (parentNode.name === 'a') {
         const metrics = ctx.measureText(line);
         ctx.fillRect(x, y + 2, metrics.width, 1);
     }
-        });
+});
         return;
     }
 

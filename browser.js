@@ -32,6 +32,9 @@ async function fetch(url, viewportWidth, viewportHeight) {
 
   
  const tokens = tokenize(body);
+ console.log('li tokens:', tokens.filter(t => t.name === 'li'));
+ const ulIndex = tokens.findIndex(t => t.name === 'ul');
+console.log('ul section tokens:', tokens.slice(ulIndex, ulIndex + 15));
 // console.log('first 5 tokens:', tokens.slice(0, 5));
  //console.log('link token:', tokens.find(t => t.name === 'link'));
   const rootNode = buildDOM(tokens);
@@ -91,7 +94,10 @@ for (let node of allStyledNodes) {
 }
 const htmlNode = querySelectorAll(rootNode, 'html')[0];
 console.log('html styles:', htmlNode?.styles);
-  
+
+const ulNode = querySelectorAll(rootNode, 'ul')[0];
+console.log('ul styles after styleMatcher:', ulNode?.styles);
+  styleMatcher(rootNode, []);
 
   calculateLayout(rootNode, viewportWidth, 0, viewportWidth, viewportHeight);
 //  console.log('body layout:', querySelector(rootNode, 'body').layout);

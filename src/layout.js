@@ -59,14 +59,21 @@ if (node.styles && node.styles['margin-top']) {
     node.layout.y += mt;
     childY = node.layout.y;
 }
+if (node.styles && node.styles['margin-left']) {
+    const ml = parseValue(node.styles['margin-left'], viewportWidth, viewportHeight);
+    console.log(node.name, 'margin-left value:', node.styles['margin-left'], 'parsed:', ml);
+    node.layout.x += ml;
+}
+console.log(node.name, 'layout.x after margin-left:', node.layout.x);
   
 
  for (let Node of node.children) {
   if (Node.name === 'head' || Node.name === 'script' || Node.name === 'style') continue;
   if (Node.type === 'text') {
+    if (!Node.value || !Node.value.trim()) continue;
     let numLines = Math.ceil((Node.value.length * 8) / node.layout.width);
-childY += numLines * 20;// default line height
-  } else {
+    childY += numLines * 20;
+} else {
    calculateLayout(Node, node.layout.width, childY, viewportWidth, viewportHeight, node.layout.x);
    
     if (Node.layout) {
