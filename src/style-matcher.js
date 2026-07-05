@@ -6,6 +6,7 @@ const defaultRules = [
     { selector: 'a', declaration: { 'text-decoration': 'underline' } },
     { selector: 'li', declaration: { 'margin-left': '20px' } },
     { selector: 'ul', declaration: { 'margin-left': '40px' } },
+    { selector: 'a', declaration: { 'text-decoration': 'underline', 'color': '#0000EE' } },
 ];
 
 function styleMatcher(node, rules) {
@@ -70,6 +71,25 @@ else if (rule.selector.startsWith('#')) {
       }
     }
   }
+}
+
+else if (rule.selector.startsWith('[')) {
+    let attrMatch = rule.selector.match(/^\[([a-zA-Z0-9_-]+)(?:=["']?([^"'\]]*)["']?)?\]$/);
+    if (attrMatch && node.attributes) {
+        let attrName = attrMatch[1];
+        let attrValue = attrMatch[2] ?? null;
+
+        let isMatch = attrValue === null
+            ? attrName in node.attributes
+            : node.attributes[attrName] === attrValue;
+
+        if (isMatch) {
+            if (!node.styles) node.styles = {};
+            for (let key in rule.declaration) {
+                node.styles[key] = rule.declaration[key];
+            }
+        }
+    }
 }
   }
 

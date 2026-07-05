@@ -213,7 +213,7 @@ function renderNode(node, ctx, parentNode) {
        const parentStyles = parentNode?.computedStyles || parentNode?.styles || {};
 const nodeStyles = node?.computedStyles || node?.styles || {};
 
-ctx.fillStyle = parentStyles.color || '#333333';
+ctx.fillStyle = nodeStyles.color || parentStyles.color || '#333333';
 
 const headingSizes = { h1: '32px', h2: '24px', h3: '20px', h4: '18px' };
 const rawSize = nodeStyles['font-size'] || parentStyles['font-size'] || '16px';

@@ -88,17 +88,17 @@ console.log('ul section tokens:', tokens.slice(ulIndex, ulIndex + 15));
   
   }
 
-  const allStyledNodes = querySelectorAll(rootNode, '*');
+ styleMatcher(rootNode, []);
+
+const allStyledNodes = querySelectorAll(rootNode, '*');
 for (let node of allStyledNodes) {
-    node.computedStyles = getComputedStyle(node);
-}
+        node.computedStyles = getComputedStyle(node);
+    }
 const htmlNode = querySelectorAll(rootNode, 'html')[0];
 console.log('html styles:', htmlNode?.styles);
 
 const ulNode = querySelectorAll(rootNode, 'ul')[0];
 console.log('ul styles after styleMatcher:', ulNode?.styles);
-  styleMatcher(rootNode, []);
-
   calculateLayout(rootNode, viewportWidth, 0, viewportWidth, viewportHeight);
 //  console.log('body layout:', querySelector(rootNode, 'body').layout);
 
