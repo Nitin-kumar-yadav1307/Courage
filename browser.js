@@ -1,6 +1,5 @@
 const {openSocket} = require("./src/socket.js");
 const {parseResponse} = require("./src/response-parser.js");
-const {parseURL} = require("./src/url-parser.js");
 const {sendRequest} = require("./src/http-request.js");
 const {buildDOM} = require("./src/dom-builder.js");
 const {tokenize} = require("./src/html-tokenizer.js");
@@ -11,47 +10,54 @@ const { parseCSS } = require('./src/css-parser.js');
 const { styleMatcher} = require('./src/style-matcher.js');
 const {calculateLayout} = require("./src/layout.js");
 const { querySelectorAll } = require('./src/querySelectorAll.js');
-const { getComputedStyle } = require('./src/computed-styles.js')
+const { getComputedStyle } = require('./src/computed-styles.js');
+const {parseURL, resolveURL} = require("./src/url-parser.js");
 
 async function fetch(url, viewportWidth, viewportHeight) {
   const {host, port, protocol, path} = parseURL(url);
 
   const rawResponse = await sendRequest(host, port, path, protocol);
+  
   //console.log(rawResponse.slice(0, 500));
 
   const {statusCode, statusText, headersObject, body} = parseResponse(rawResponse);
  // console.log(body.slice(0, 3000));
+ console.log('=== PAGE BODY length:', body.length);
+console.log('=== PAGE BODY FULL:', body);
 
   
 
   if (statusCode === 301 || statusCode === 302) {
     const newUrl = headersObject['location'];
-  //  console.log('Redirecting to:', newUrl);
     return fetch(newUrl, viewportWidth, viewportHeight);
   }
 
-  
- const tokens = tokenize(body);
- console.log('li tokens:', tokens.filter(t => t.name === 'li'));
- const ulIndex = tokens.findIndex(t => t.name === 'ul');
-console.log('ul section tokens:', tokens.slice(ulIndex, ulIndex + 15));
-// console.log('first 5 tokens:', tokens.slice(0, 5));
- //console.log('link token:', tokens.find(t => t.name === 'link'));
-  const rootNode = buildDOM(tokens);
-  
-  allLinkNode = querySelectorAll(rootNode,'link');
- for (let link of allLinkNode) {
-  if (!link.attributes.href) continue;
-    if (link.attributes.rel === 'stylesheet') {
-       let styleCSS = await fetchCSS(link.attributes.href);
-       const cssTokens = tokenizeCSS(styleCSS);
-       const rules = parseCSS(cssTokens); 
-         console.log('selectors:', rules.map(r => r.selector).join(', '));            // https://github.com/    http://example.com
-       //console.log('rules:', JSON.stringify(rules));
-       styleMatcher(rootNode, rules);
+  const tokens = tokenize(body);
 
+  console.log('total tokens:', tokens.length);
+  console.log('div tokens:', tokens.filter(t => t.name === 'div'));
+
+  const rootNode = buildDOM(tokens);
+
+  console.log('document root children:', rootNode.children.map(c => c.name || c.type));
+  const htmlNodeCheck = rootNode.children.find(c => c.name === 'html');
+  console.log('html children:', htmlNodeCheck?.children.map(c => c.name || c.type));
+
+  const bodyNode = querySelector(rootNode, 'body');
+  console.log('body children:', bodyNode.children.map(c => c.name || c.type));
+
+  allLinkNode = querySelectorAll(rootNode,'link');
+  for (let link of allLinkNode) {
+    if (!link.attributes.href) continue;
+    if (link.attributes.rel === 'stylesheet') {
+      let absoluteHref = resolveURL(url, link.attributes.href);
+      let styleCSS = await fetchCSS(absoluteHref);
+      const cssTokens = tokenizeCSS(styleCSS);
+      const rules = parseCSS(cssTokens);
+      styleMatcher(rootNode, rules);
     }
-}
+  }
+
 
   const allNodes = querySelectorAll(rootNode, '*');
   for (let node of allNodes) {
@@ -97,6 +103,7 @@ for (let node of allStyledNodes) {
 const htmlNode = querySelectorAll(rootNode, 'html')[0];
 console.log('html styles:', htmlNode?.styles);
 
+
 const ulNode = querySelectorAll(rootNode, 'ul')[0];
 console.log('ul styles after styleMatcher:', ulNode?.styles);
   calculateLayout(rootNode, viewportWidth, 0, viewportWidth, viewportHeight);
@@ -122,6 +129,11 @@ async function fetchCSS(url){
  const {host, port, protocol, path} = parseURL(url);
    const rawResponse = await sendRequest(host, port, path, protocol);
    const {statusCode, statusText, headersObject, body} = parseResponse(rawResponse);
+   console.log('=== PAGE BODY length:', body.length);
+console.log('=== PAGE BODY FULL:', body);
+   console.log('body length:', body.length);
+console.log('body FULL:', body);
+console.log('transfer-encoding header:', headersObject['transfer-encoding']);
    return body;
 }
 

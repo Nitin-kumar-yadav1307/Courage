@@ -1,9 +1,7 @@
 function parseResponse(rawResponse){
 
-  let  responseArray =rawResponse.split('\r\n\r\n');
-  
-  let head = responseArray[0];
-  
+  let separatorIndex = rawResponse.indexOf('\r\n\r\n');
+let head = rawResponse.slice(0, separatorIndex);
   let headersArray= head.split("\r\n");
   let statusLine = headersArray[0];
   let headers = headersArray.slice(1) // everything from index 1 onwards;
@@ -20,7 +18,7 @@ function parseResponse(rawResponse){
      let value = split[1];
      headersObject[key] = value; 
   }
-  let body = responseArray[1];
+  let body = rawResponse.slice(separatorIndex + 4);
    console.log('BODY START:', body.slice(0, 100));
    // Strip chunk size numbers from chunked transfer encoding
    console.log('transfer-encoding:', headersObject['transfer-encoding']);

@@ -38,4 +38,24 @@ function parseURL(url){
 
 }
 
-module.exports = {parseURL};
+function resolveURL(baseUrl, href) {
+    // Case 1: already absolute
+    if (href.includes("://")) {
+        return href;
+    }
+
+    const base = parseURL(baseUrl);
+
+    // Case 2: root-relative (starts with "/")
+    if (href.startsWith("/")) {
+        return `${base.protocol}://${base.host}:${base.port}${href}`;
+    }
+
+    // Case 3: relative to current path's directory
+    let dir = base.path.slice(0, base.path.lastIndexOf("/") + 1);
+    if (dir === "") dir = "/";
+
+    return `${base.protocol}://${base.host}:${base.port}${dir}${href}`;
+}
+
+module.exports = { parseURL, resolveURL };
